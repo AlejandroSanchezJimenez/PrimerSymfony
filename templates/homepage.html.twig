@@ -1,0 +1,7 @@
+<h1>Hola {{user | upper}}</h1>
+
+{% if (app.request.method)=="GET" %}
+    <p>ANDORRA VA BIEN.</p>
+    <a href="{{ path('operador', {operador: 'multiplica', num1: 1, num2: 2}) }}" role="button">Vamos a la calculadora</a>
+{% endif %}
+
