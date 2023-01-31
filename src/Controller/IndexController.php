@@ -3,14 +3,24 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Micontroller extends AbstractController
+class IndexController extends AbstractController
 {
     #[Route('/',name:'landing')]
     public function landing():Response 
     {
-        die("Se acabó");
+        $html = $this->render('header.html.twig');
+        return $html;
+    } 
+
+    #[Route('/home/{user}')]
+    public function request(String $user=null, Request $request):Response 
+    {
+        $id= $request->query->get('id');
+        $html = $this->render('formu.html.twig', ['user' => $user,'id' => $id]);
+        return $html;
     } 
 
     #[Route('/home/{idioma}&{user}', name:"home")] 
