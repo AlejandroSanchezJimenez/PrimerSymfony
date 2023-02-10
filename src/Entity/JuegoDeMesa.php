@@ -46,13 +46,13 @@ class JuegoDeMesa
     private ?float $Longitud = null;
 
     #[ORM\Column(type: Types::BLOB)]
-    #[Assert\Image(
-        minWidth: 200,
-        maxWidth: 600,
-        minHeight: 200,
-        maxHeight: 600,
-    )]
-    private $Carátula = null;
+    // #[Assert\Image(
+    //     minWidth: 100,
+    //     maxWidth: 200,
+    //     minHeight: 100,
+    //     maxHeight: 200,
+    // )]
+    private $Caratula = null;
 
     #[ORM\Column]
     #[Assert\Positive]
@@ -73,6 +73,15 @@ class JuegoDeMesa
 
     #[ORM\OneToMany(mappedBy: 'Juego', targetEntity: JuegosdeEvento::class, orphanRemoval: true)]
     private Collection $Juegos;
+
+    #[ORM\Column(type: Types::BLOB)]
+    // #[Assert\Image(
+    //     minWidth: 100,
+    //     maxWidth: 200,
+    //     minHeight: 100,
+    //     maxHeight: 200,
+    // )]
+    private $Tablero = null;
 
     public function __construct()
     {
@@ -133,14 +142,14 @@ class JuegoDeMesa
         return $this;
     }
 
-    public function getCarátula()
+    public function getCaratula()
     {
-        return $this->Carátula;
+        return $this->Caratula;
     }
 
-    public function setCarátula($Carátula): self
+    public function setCaratula($Caratula): self
     {
-        $this->Carátula = $Carátula;
+        $this->Caratula = $Caratula;
 
         return $this;
     }
@@ -225,6 +234,18 @@ class JuegoDeMesa
                 $juego->setJuego(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTablero()
+    {
+        return $this->Tablero;
+    }
+
+    public function setTablero($Tablero): self
+    {
+        $this->Tablero = $Tablero;
 
         return $this;
     }

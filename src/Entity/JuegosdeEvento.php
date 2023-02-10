@@ -15,7 +15,7 @@ class JuegosdeEvento
 
     #[ORM\ManyToOne(inversedBy: 'Juegos')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Juegodemesa $Juego = null;
+    private ?JuegoDeMesa $Juego = null;
 
     #[ORM\ManyToOne(inversedBy: 'Eventos')]
     #[ORM\JoinColumn(nullable: false)]
@@ -26,12 +26,12 @@ class JuegosdeEvento
         return $this->id;
     }
 
-    public function getJuego(): ?Juegodemesa
+    public function getJuego(): ?JuegoDeMesa
     {
         return $this->Juego;
     }
 
-    public function setJuego(?Juegodemesa $Juego): self
+    public function setJuego(?JuegoDeMesa $Juego): self
     {
         $this->Juego = $Juego;
 

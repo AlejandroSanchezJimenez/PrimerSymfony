@@ -5,6 +5,7 @@ namespace App\Controller;
 use Doctrine\ORM\EntityManager;
 use App\Entity\Producto;
 use App\Entity\Categoria;
+use App\Service\MessageGenerator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,11 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     #[Route('/product', name: 'app_product')]
-    public function index(): Response
+    public function index(MessageGenerator $messageGenerator): Response
     {
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
+        $message = 'hola';
+        $this->addFlash('success', $message);
+        return new Response($message);
     }
 
     #[Route('/product/crear', name: 'create_product')]

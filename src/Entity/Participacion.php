@@ -17,12 +17,16 @@ class Participacion
     #[ORM\JoinColumn(nullable: false)]
     private ?Evento $Evento = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ParticipanUsuario')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Usuario $Usuario = null;
+    // #[ORM\ManyToOne(inversedBy: 'ParticipanUsuario')]
+    // #[ORM\JoinColumn(nullable: false)]
+    // private ?Usuario $Usuario = null;
 
     #[ORM\Column]
     private ?bool $Asiste = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Participaciones')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Usuario $idUsuario = null;
 
     public function getId(): ?int
     {
@@ -41,17 +45,17 @@ class Participacion
         return $this;
     }
 
-    public function getUsuario(): ?Usuario
-    {
-        return $this->Usuario;
-    }
+    // public function getUsuario(): ?Usuario
+    // {
+    //     return $this->Usuario;
+    // }
 
-    public function setUsuario(?Usuario $Usuario): self
-    {
-        $this->Usuario = $Usuario;
+    // public function setUsuario(?Usuario $Usuario): self
+    // {
+    //     $this->Usuario = $Usuario;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function isAsiste(): ?bool
     {
@@ -61,6 +65,18 @@ class Participacion
     public function setAsiste(bool $Asiste): self
     {
         $this->Asiste = $Asiste;
+
+        return $this;
+    }
+
+    public function getIdUsuario(): ?Usuario
+    {
+        return $this->idUsuario;
+    }
+
+    public function setIdUsuario(?Usuario $idUsuario): self
+    {
+        $this->idUsuario = $idUsuario;
 
         return $this;
     }

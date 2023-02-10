@@ -2,21 +2,60 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\UsuarioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
-class Usuario
+#[UniqueEntity(fields: ['Email'], message: 'There is already an account with this Email')]
+class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Email(
+        message: 'Este email {{ value }} no es válido.',
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 30,
+        minMessage: 'Tu email tiene que tener al menos {{ limit }} caracteres',
+        maxMessage: 'Tu email tiene que tener como máximo {{ limit }} caracteres',
+    )]
+
+    private ?string $Email = null;
+
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    #[Assert\NotCompromisedPassword]
+    #[Assert\Length(
+        min: 3,
+        max: 10,
+        minMessage: 'Tu contraseña tiene que tener al menos {{ limit }} caracteres',
+        maxMessage: 'Tu contraseña tiene que tener como máximo {{ limit }} caracteres',
+    )]
+
+    private ?string $password = null;
+
+    #[ORM\OneToMany(mappedBy: 'idUsuario', targetEntity: Reserva::class)]
+    private Collection $Reservas;
+
+    #[ORM\OneToMany(mappedBy: 'idUsuario', targetEntity: Participacion::class, orphanRemoval: true)]
+    private Collection $Participaciones;
 
     #[ORM\Column(length: 30)]
     #[Assert\NotBlank]
@@ -36,42 +75,19 @@ class Usuario
         minMessage: 'Tu primer apellido tiene que tener al menos {{ limit }} caracteres',
         maxMessage: 'Tu primer apellido tiene que tener como máximo {{ limit }} caracteres',
     )]
+
     private ?string $Ape1 = null;
 
     #[ORM\Column(length: 40, nullable: true)]
     #[Assert\Length(
         min: 3,
         max: 40,
-        minMessage: 'Tu segundo apellido tiene que tener al menos {{ limit }} caracteres',
-        maxMessage: 'Tu segundo apellido tiene que tener como máximo {{ limit }} caracteres',
+        minMessage: 'Tu primer apellido tiene que tener al menos {{ limit }} caracteres',
+        maxMessage: 'Tu primer apellido tiene que tener como máximo {{ limit }} caracteres',
     )]
     private ?string $Ape2 = null;
 
-    #[ORM\Column(length: 10)]
-    #[Assert\NotBlank]
-    #[Assert\NotCompromisedPassword]
-    #[Assert\Length(
-        min: 3,
-        max: 10,
-        minMessage: 'Tu contraseña tiene que tener al menos {{ limit }} caracteres',
-        maxMessage: 'Tu contraseña tiene que tener como máximo {{ limit }} caracteres',
-    )]
-    private ?string $Contraseña = null;
-
-    #[ORM\Column(length: 30)]
-    #[Assert\NotBlank]
-    #[Assert\Email(
-        message: 'Este email {{ value }} no es válido.',
-    )]
-    #[Assert\Length(
-        min: 3,
-        max: 30,
-        minMessage: 'Tu email tiene que tener al menos {{ limit }} caracteres',
-        maxMessage: 'Tu email tiene que tener como máximo {{ limit }} caracteres',
-    )]
-    private ?string $Correo_electronico = null;
-
-    #[ORM\Column(length: 15)]
+    #[ORM\Column(length: 20)]
     #[Assert\NotBlank]
     #[Assert\Length(
         min: 3,
@@ -81,10 +97,6 @@ class Usuario
     )]
     private ?string $Nickname = null;
 
-    #[ORM\Column(length: 20)]
-    #[Assert\NotBlank]
-    private ?string $Rol = null;
-
     #[ORM\Column]
     #[Assert\NotBlank]
     #[Assert\Length(
@@ -93,23 +105,142 @@ class Usuario
         minMessage: 'Tu número de telegram debe ser de {{ limit }} dígitos',
         maxMessage: 'Tu número de telegram debe ser de {{ limit }} dígitos',
     )]
-    private ?int $Num_Telegram = null;
-
-    #[ORM\OneToMany(mappedBy: 'Usuario', targetEntity: Reserva::class, orphanRemoval: true)]
-    private Collection $Reservas;
-
-    #[ORM\OneToMany(mappedBy: 'Usuario', targetEntity: Participacion::class, orphanRemoval: true)]
-    private Collection $ParticipanUsuario;
+    private ?int $Num_telegram = null;
 
     public function __construct()
     {
         $this->Reservas = new ArrayCollection();
-        $this->ParticipanUsuario = new ArrayCollection();
+        $this->Participaciones = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->Email;
+    }
+
+    public function setEmail(string $Email): self
+    {
+        $this->Email = $Email;
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->Email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Reserva>
+     */
+    public function getReservas(): Collection
+    {
+        return $this->Reservas;
+    }
+
+    public function addReserva(Reserva $reserva): self
+    {
+        if (!$this->Reservas->contains($reserva)) {
+            $this->Reservas->add($reserva);
+            $reserva->setIdUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReserva(Reserva $reserva): self
+    {
+        if ($this->Reservas->removeElement($reserva)) {
+            // set the owning side to null (unless already changed)
+            if ($reserva->getIdUsuario() === $this) {
+                $reserva->setIdUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participacion>
+     */
+    public function getParticipaciones(): Collection
+    {
+        return $this->Participaciones;
+    }
+
+    public function addParticipacione(Participacion $participacione): self
+    {
+        if (!$this->Participaciones->contains($participacione)) {
+            $this->Participaciones->add($participacione);
+            $participacione->setIdUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipacione(Participacion $participacione): self
+    {
+        if ($this->Participaciones->removeElement($participacione)) {
+            // set the owning side to null (unless already changed)
+            if ($participacione->getIdUsuario() === $this) {
+                $participacione->setIdUsuario(null);
+            }
+        }
+
+        return $this;
     }
 
     public function getNombre(): ?string
@@ -148,30 +279,6 @@ class Usuario
         return $this;
     }
 
-    public function getContraseña(): ?string
-    {
-        return $this->Contraseña;
-    }
-
-    public function setContraseña(string $Contraseña): self
-    {
-        $this->Contraseña = $Contraseña;
-
-        return $this;
-    }
-
-    public function getCorreoElectronico(): ?string
-    {
-        return $this->Correo_electronico;
-    }
-
-    public function setCorreoElectronico(string $Correo_electronico): self
-    {
-        $this->Correo_electronico = $Correo_electronico;
-
-        return $this;
-    }
-
     public function getNickname(): ?string
     {
         return $this->Nickname;
@@ -184,86 +291,14 @@ class Usuario
         return $this;
     }
 
-    public function getRol(): ?string
-    {
-        return $this->Rol;
-    }
-
-    public function setRol(string $Rol): self
-    {
-        $this->Rol = $Rol;
-
-        return $this;
-    }
-
     public function getNumTelegram(): ?int
     {
-        return $this->Num_Telegram;
+        return $this->Num_telegram;
     }
 
-    public function setNumTelegram(int $Num_Telegram): self
+    public function setNumTelegram(int $Num_telegram): self
     {
-        $this->Num_Telegram = $Num_Telegram;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Reserva>
-     */
-    public function getReservas(): Collection
-    {
-        return $this->Reservas;
-    }
-
-    public function addReserva(Reserva $reserva): self
-    {
-        if (!$this->Reservas->contains($reserva)) {
-            $this->Reservas->add($reserva);
-            $reserva->setUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReserva(Reserva $reserva): self
-    {
-        if ($this->Reservas->removeElement($reserva)) {
-            // set the owning side to null (unless already changed)
-            if ($reserva->getUsuario() === $this) {
-                $reserva->setUsuario(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Participacion>
-     */
-    public function getParticipanUsuario(): Collection
-    {
-        return $this->ParticipanUsuario;
-    }
-
-    public function addParticipanUsuario(Participacion $participanUsuario): self
-    {
-        if (!$this->ParticipanUsuario->contains($participanUsuario)) {
-            $this->ParticipanUsuario->add($participanUsuario);
-            $participanUsuario->setUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipanUsuario(Participacion $participanUsuario): self
-    {
-        if ($this->ParticipanUsuario->removeElement($participanUsuario)) {
-            // set the owning side to null (unless already changed)
-            if ($participanUsuario->getUsuario() === $this) {
-                $participanUsuario->setUsuario(null);
-            }
-        }
+        $this->Num_telegram = $Num_telegram;
 
         return $this;
     }

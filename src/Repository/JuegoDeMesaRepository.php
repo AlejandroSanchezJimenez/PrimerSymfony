@@ -39,20 +39,33 @@ class JuegoDeMesaRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return JuegoDeMesa[] Returns an array of JuegoDeMesa objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('j')
-//            ->andWhere('j.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('j.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return JuegoDeMesa[] Returns an array of JuegoDeMesa objects
+    */
+   public function findAllJuegos(): array
+   {
+       return $this->createQueryBuilder('j')
+        //    ->andWhere('j.exampleField = :val')
+        //    ->setParameter('val', $value)
+           ->orderBy('j.id', 'ASC')
+        //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+   public function findJuegosPopulares(): array
+   {
+       return $this->createQueryBuilder('j')
+       ->join('reserva.juego', 'j')
+        //    ->andWhere('j.exampleField = :val')
+        //    ->setParameter('val', $value)
+           ->orderBy('count(r.juego.id)', 'DESC')
+           ->setMaxResults(4)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?JuegoDeMesa
 //    {

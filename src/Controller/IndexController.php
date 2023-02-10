@@ -1,26 +1,30 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\JuegoDeMesa;
+use App\Repository\JuegoDeMesaRepository;
+use App\Repository\ReservaRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 class IndexController extends AbstractController
 {
     #[Route('/',name:'landing')]
-    public function landing():Response 
+    public function landing(ReservaRepository $reserva, JuegoDeMesaRepository $juego): Response 
     {
-        $html = $this->render('header.html.twig');
-        return $html;
+        $reservas= $reserva->findAll();
+        $juegos=$juego->findAll();
+        return $this->render('index.html.twig', ['reservas' => $reservas, 'juegos' => $juegos]);
     } 
 
-    #[Route('/home/{user}')]
-    public function request(String $user=null, Request $request):Response 
+    #[Route('/home')]
+    public function request(JuegoDeMesaRepository $juego)
     {
-        $id= $request->query->get('id');
-        $html = $this->render('formu.html.twig', ['user' => $user,'id' => $id]);
-        return $html;
+        $juegos=$juego->findAll();
+        return new Response(dump($juegos));
     } 
 
     #[Route('/home/{idioma}&{user}', name:"home")] 
