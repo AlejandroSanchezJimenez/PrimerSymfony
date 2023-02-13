@@ -52,13 +52,14 @@
 										<a href="/eventos">Eventos</a>
 									</li>
 									{% if app.user!=null %}
-										{% if "ADMIN" in app.user.roles %}
+										{% if "ROLE_ADMIN" in app.user.roles %}
 											<li>
-												<a href="/mantenimiento">Mantenimiento</a>
+												<a href="/admin">Mantenimiento</a>
 											</li>
 										{% endif %}
-									{% endif %}
-									{% if app.user!=null %}
+										<li>
+											<a href="/logout">Logout</a>
+										</li>
 										<li>
 											<a href="/perfil">Perfil
 												<img src="assets/images/logo.png" alt=""></a>
@@ -95,24 +96,24 @@
 			{% endblock %}
 		{% endblock %}
 		{% block footer %}
-		<footer>
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12">
-						<p>Copyright © 2077
-							<a href="landing">Los Juegos Hermanos</a>
-							Company. All rights reserved.
+			<footer>
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<p>Copyright © 2077
+								<a href="landing">Los Juegos Hermanos</a>
+								Company. All rights reserved.
 
-							<br>Design:
-							<a href="https://www.youtube.com/watch?v=kizMi_xe_Gc" target="_blank" title="free CSS templates">Alex</a>
-							Distributed By
-							<a href="https://www.youtube.com/watch?v=kizMi_xe_Gc" target="_blank">Alex</a>
-						</p>
+								<br>Design:
+								<a href="https://www.youtube.com/watch?v=kizMi_xe_Gc" target="_blank" title="free CSS templates">Alex</a>
+								Distributed By
+								<a href="https://www.youtube.com/watch?v=kizMi_xe_Gc" target="_blank">Alex</a>
+							</p>
+						</div>
 					</div>
 				</div>
-			</div>
-		</footer>
+			</footer>
 		{% endblock %}
 	</body>
-	
+
 </html>

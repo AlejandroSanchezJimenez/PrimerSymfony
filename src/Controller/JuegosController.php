@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\JuegoDeMesa;
 use App\Repository\JuegoDeMesaRepository;
+use App\Repository\MesaRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,11 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class JuegosController extends AbstractController
 {
     #[Route('/juegos', name: 'app_juegos')]
-    public function index(JuegoDeMesaRepository $juego): Response
+    public function index(JuegoDeMesaRepository $juego, MesaRepository $mesa): Response
     {
         $juegos=$juego->findAll();
+        
+
         return $this->render('juegos/index.html.twig', [
-            'juegos' => $juegos
+            'juegos' => $juegos,
+            'mesa' => $mesa
         ]);
     }
 

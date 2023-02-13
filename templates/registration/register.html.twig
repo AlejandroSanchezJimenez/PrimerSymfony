@@ -1,23 +1,58 @@
+{# {% extends 'base.html.twig' %} #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}
+	Los juegos hermanos
+{% endblock %}
 
 {% block body %}
 
-    <h1>Register</h1>
+	{% block header %}
+		{{parent()}}
+	{% endblock %}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.Email) }}
-        {{ form_row(registrationForm.plainPassword, {
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div
+					class="page-content">
+
+
+					<!-- ***** Most Popular Start ***** -->
+					<div class="most-popular">
+						<center>
+							<div class="col-lg-3 col-sm-6">
+								<div class="item">
+									<h3>
+										<em>¡Únete a la familia de los juegos!</em>
+									</h3>
+									<br><br>
+									{{ form_start(registrationForm) }}
+									{{ form_row(registrationForm.Email) }}<br>
+									{{ form_row(registrationForm.plainPassword, {
             label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.Nombre) }}
-        {{ form_row(registrationForm.Ape1) }}
-        {{ form_row(registrationForm.Ape2) }}
-        {{ form_row(registrationForm.Nickname) }}
-        {{ form_row(registrationForm.num_telegram) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        }) }}<br>
+									{{ form_row(registrationForm.Nombre) }}<br>
+									{{ form_row(registrationForm.Ape1) }}<br>
+									{{ form_row(registrationForm.Ape2) }}<br>
+									{{ form_row(registrationForm.Nickname) }}<br>
+									{{ form_row(registrationForm.num_telegram) }}<br>
+									{{ form_row(registrationForm.agreeTerms) }}<br><br>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-{% endblock %}
+									<center>
+										<button type="submit" class="main-button-new">Unirme</button>
+									</center>
+									{{ form_end(registrationForm) }}
+								</div>
+							</div>
+							<center>
+
+							</div>
+							<!-- ***** Most Popular End ***** -->
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endblock %}

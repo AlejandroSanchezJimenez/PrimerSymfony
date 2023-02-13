@@ -18,12 +18,20 @@ class JuegosdeMesaType extends AbstractType
             ->add('Editorial')
             ->add('Anchura')
             ->add('Longitud')
-            ->add('Caratula',FileType::class)
-            ->add('Tablero',FileType::class)
+            ->add('Caratula',FileType::class, array(
+                'multiple'    => false,
+                'attr' => array(
+                    'accept' => 'image/*',
+                )
+            ))
+            ->add('Tablero',FileType::class, array(
+                'multiple'    => false,
+                'attr' => array(
+                    'accept' => 'image/*',
+                )
+            ))
             ->add('Min_jug')
-            ->add('Max_jug')
-            ->add('Crear',SubmitType::class)
-        ;
+            ->add('Max_jug');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

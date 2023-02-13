@@ -16,7 +16,7 @@ class IndexController extends AbstractController
     public function landing(ReservaRepository $reserva, JuegoDeMesaRepository $juego): Response 
     {
         $reservas= $reserva->findAll();
-        $juegos=$juego->findAll();
+        $juegos=$reserva->findJuegosPopulares();
         return $this->render('index.html.twig', ['reservas' => $reservas, 'juegos' => $juegos]);
     } 
 
@@ -25,40 +25,6 @@ class IndexController extends AbstractController
     {
         $juegos=$juego->findAll();
         return new Response(dump($juegos));
-    } 
-
-    #[Route('/home/{idioma}&{user}', name:"home")] 
-    public function home(String $user=null, String $idioma=null):Response
-    {
-        if ($idioma=="Español")
-        {
-            $html = $this->render('homepage.html.twig', ['user' => $user]);
-            return $html;
-        }
-        else if ($idioma=="Ingles")
-        {
-            die("Welcome ".$user);
-        }
-        return new Response("Welcome");
-    } 
-
-    #[Route('/operador/{operador}&{num1}&{num2}', name:'operador')]
-    public function opera(String $operador=null,int $num1=null, int $num2=null):Response
-    {
-        if ($operador=="suma") {
-            $resul=$num1+$num2;
-        }
-        else if ($operador=="resta") {
-            $resul=$num1-$num2;
-        }
-        else if ($operador=="multiplica") {
-            $resul=$num1*$num2;
-        }
-        else if ($operador=="divide") {
-            $resul=$num1/$num2;
-        }
-
-        die("El resultado es $resul");
     } 
 }
 ?>

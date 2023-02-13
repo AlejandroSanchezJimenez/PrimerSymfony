@@ -54,14 +54,14 @@ class MesaRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-   public function findOneBySomeField($value,$value2): ?Mesa
+   public function findBySomeField($value,$value2): array
    {
        return $this->createQueryBuilder('m')
-           ->andWhere('m.x = :val and m.y = :val2')
+           ->andWhere('m.Anchura >= :val and m.Longitud >= :val2')
            ->setParameter('val', $value)
            ->setParameter('val2',$value2)
            ->getQuery()
-           ->getOneOrNullResult()
+           ->getResult()
        ;
    }
 }

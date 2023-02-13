@@ -35,7 +35,7 @@ class RegistrationController extends AbstractController
             $user->setEmail($form->get('Email')->getData());
             $user->setNumTelegram($form->get('num_telegram')->getData());
             $user->setEmail($form->get('Email')->getData());
-            $user->setRoles(array("ADMIN"));
+            $user->setRoles(array("ROLE_USER"));
             
 
             $entityManager->persist($user);

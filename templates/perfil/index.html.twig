@@ -31,7 +31,7 @@
 												{{ app.user.nombre ~ ' ' ~ app.user.ape1 ~ ' ' ~ app.user.ape2 }}
 											</h4>
 											<div class="main-border-button">
-												<a href="#">Reservar</a>
+												<a href="/juegos">Reservar</a>
 											</div>
 										</div>
 									</div>
@@ -56,74 +56,31 @@
 												<div class="col-lg-12">
 													<div class="heading-section">
 														<h4>
-															<em>Últimas</em>
-															partidas</h4>
+															<em>Partidas</em>
+															recientes</h4>
 													</div>
 												</div>
-												<div class="col-lg-3 col-sm-6">
-													<div class="item">
-														<div class="thumb">
-															<img src="assets/images/clip-01.jpg" alt="" style="border-radius: 23px;">
-															<a href="https://www.youtube.com/watch?v=r1b03uKWk_M" target="_blank">
-																<i class="fa fa-play"></i>
-															</a>
-														</div>
-														<div class="down-content">
-															<h4>First Clip</h4>
-															<span>
-																<i class="fa fa-eye"></i>
-																250</span>
-														</div>
-													</div>
-												</div>
-												<div class="col-lg-3 col-sm-6">
-													<div class="item">
-														<div class="thumb">
-															<img src="assets/images/clip-02.jpg" alt="" style="border-radius: 23px;">
-															<a href="https://www.youtube.com/watch?v=r1b03uKWk_M" target="_blank">
-																<i class="fa fa-play"></i>
-															</a>
-														</div>
-														<div class="down-content">
-															<h4>Second Clip</h4>
-															<span>
-																<i class="fa fa-eye"></i>
-																183</span>
+												{% for juegos in jugados %}
+													<div class="col-lg-3 col-sm-6">
+														<div class="item">
+															{% if reservas!=null %}
+																<div class="thumb">
+																	<img src="{{ asset('Juego_de_mesa_fotos/' ~ juegos.juego.Nombre ~ 'caratula.png') }}" width="200" height="200" alt="" style="border-radius: 23px;">
+																</div>
+																<div class="down-content">
+																	<h4>{{juegos.juego.Nombre}}</h4>
+																	<span>
+																		{{juegos.diareserva|date('d-m-Y')}}</span>
+																</div>
+															{% else %}
+																<h4>
+																	<center>Aún no has jugado ninguna vez, ¡Anímate!
+																	</center>
+																</h4>
+															{% endif %}
 														</div>
 													</div>
-												</div>
-												<div class="col-lg-3 col-sm-6">
-													<div class="item">
-														<div class="thumb">
-															<img src="assets/images/clip-03.jpg" alt="" style="border-radius: 23px;">
-															<a href="https://www.youtube.com/watch?v=r1b03uKWk_M" target="_blank">
-																<i class="fa fa-play"></i>
-															</a>
-														</div>
-														<div class="down-content">
-															<h4>Third Clip</h4>
-															<span>
-																<i class="fa fa-eye"></i>
-																141</span>
-														</div>
-													</div>
-												</div>
-												<div class="col-lg-3 col-sm-6">
-													<div class="item">
-														<div class="thumb">
-															<img src="assets/images/clip-04.jpg" alt="" style="border-radius: 23px;">
-															<a href="https://www.youtube.com/watch?v=r1b03uKWk_M" target="_blank">
-																<i class="fa fa-play"></i>
-															</a>
-														</div>
-														<div class="down-content">
-															<h4>Fourth Clip</h4>
-															<span>
-																<i class="fa fa-eye"></i>
-																91</span>
-														</div>
-													</div>
-												</div>
+												{% endfor %}
 											</div>
 										</div>
 									</div>
@@ -138,7 +95,7 @@
 						<div class="col-lg-12">
 							<div class="heading-section">
 								<h4>
-									<em>Juegos</em>
+									<em>Eventos</em>
 									jugados</h4>
 							</div>
 							<div class="item">
@@ -221,6 +178,62 @@
 							</div>
 						</div>
 					</div>
+					{% if app.user!=null %}
+						<!-- ***** Gaming Library Start ***** -->
+						<div class="gaming-library">
+							<div class="col-lg-12">
+								<div class="heading-section">
+									<h4>Tus
+										<em>reservas</em</h4>
+									</div>
+									<div class="item">
+										{% if reservas!=null %}
+											{% for reserva in reservas %}
+												<center>
+													<ul>
+														<li>
+															<h4>Juego</h4>
+															<span>{{reserva.juego.nombre}}</span>
+														</li>
+														<li>
+															<h4>Número de mesa</h4>
+															<span>{{reserva.mesa.id}}</span>
+														</li>
+														<li>
+															<h4>Día de reserva</h4>
+															<span>{{reserva.diareserva|date('d-m-y')}}</span>
+														</li>
+														<li>
+															<h4>Horas reservadas</h4>
+															<span>{{reserva.horaentrada|date("h-i") ~ '/' ~ reserva.horasalida|date("h-i")}}</span>
+														</li>
+														<li>
+															<div class="main-border-button border-no-active">
+																<a href={{'/cancelareserva?id_reserva=' ~ reserva.id}}>Cancelar</a>
+															</div>
+														</li>
+													</ul>
+												</center>
+											{% endfor %}
+										{% else %}
+											<h4>
+												<center>Sin reservas, de momento. ¡Anímate!
+												</center>
+											</h4>
+										{% endif %}
+									</div>
+								</div>
+								<div class="col-lg-12">
+									<div class="main-button">
+										{% if reservas==null %}
+											<a href="/juegos">Reservar</a>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- ***** Gaming Library End ***** -->
+					{% endif %}
 					<!-- ***** Gaming Library End ***** -->
 				</div>
 			</div>
