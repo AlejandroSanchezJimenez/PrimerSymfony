@@ -98,86 +98,45 @@
 									<em>Eventos</em>
 									jugados</h4>
 							</div>
-							<div class="item">
-								<ul>
-									<li><img src="assets/images/game-01.jpg" alt="" class="templatemo-item"></li>
-									<li>
-										<h4>Dota 2</h4>
-										<span>Sandbox</span>
-									</li>
-									<li>
-										<h4>Date Added</h4>
-										<span>24/08/2036</span>
-									</li>
-									<li>
-										<h4>Hours Played</h4>
-										<span>634 H 22 Mins</span>
-									</li>
-									<li>
-										<h4>Currently</h4>
-										<span>Downloaded</span>
-									</li>
-									<li>
-										<div class="main-border-button border-no-active">
-											<a href="#">Donwloaded</a>
-										</div>
-									</li>
-								</ul>
-							</div>
-							<div class="item">
-								<ul>
-									<li><img src="assets/images/game-02.jpg" alt="" class="templatemo-item"></li>
-									<li>
-										<h4>Fortnite</h4>
-										<span>Sandbox</span>
-									</li>
-									<li>
-										<h4>Date Added</h4>
-										<span>22/06/2036</span>
-									</li>
-									<li>
-										<h4>Hours Played</h4>
-										<span>745 H 22 Mins</span>
-									</li>
-									<li>
-										<h4>Currently</h4>
-										<span>Downloaded</span>
-									</li>
-									<li>
-										<div class="main-border-button border-no-active">
-											<a href="#">Donwloaded</a>
-										</div>
-									</li>
-								</ul>
-							</div>
-							<div class="item last-item">
-								<ul>
-									<li><img src="assets/images/game-03.jpg" alt="" class="templatemo-item"></li>
-									<li>
-										<h4>CS-GO</h4>
-										<span>Sandbox</span>
-									</li>
-									<li>
-										<h4>Date Added</h4>
-										<span>21/04/2022</span>
-									</li>
-									<li>
-										<h4>Hours Played</h4>
-										<span>632 H 46 Mins</span>
-									</li>
-									<li>
-										<h4>Currently</h4>
-										<span>Downloaded</span>
-									</li>
-									<li>
-										<div class="main-border-button border-no-active">
-											<a href="#">Donwloaded</a>
-										</div>
-									</li>
-								</ul>
-							</div>
+							{% if eventos!=null %}
+								{% for evento in eventos %}
+									<div class="item">
+										<ul>
+											<li><img src="rc="{{ asset('Juego_de_mesa_fotos/' ~ evento.juego.Nombre ~ 'caratula.png') }}"" alt="" class="templatemo-item"></li>
+											<li>
+												<h4>Nombre</h4>
+												<span>{{evento.nombre}}</span>
+											</li>
+											<li>
+												<h4>Descripción</h4>
+												<span>{{evento.Descripcion}}</span>
+											</li>
+											<li>
+												<h4>Fecha de inicio</h4>
+												<span>{{evento.fechaini|date('d-m-y')}}</span>
+											</li>
+											<li>
+												<h4>Fecha de fin</h4>
+												<span>{{evento.fechafin|date('d-m-y')}}</span>
+											</li>
+											<li>
+												<div class="main-button">
+													<a href="#">Participar</a>
+												</div>
+											</li>
+										</ul>
+									</div>
+								{% endfor %}
+							{% else %}
+								<h4>
+									<center>Sin eventos de momento. ¡Anímate!
+									</center>
+								</h4>
+							{% endif %}
+
 						</div>
 					</div>
+
 					{% if app.user!=null %}
 						<!-- ***** Gaming Library Start ***** -->
 						<div class="gaming-library">
@@ -208,7 +167,7 @@
 															<span>{{reserva.horaentrada|date("h-i") ~ '/' ~ reserva.horasalida|date("h-i")}}</span>
 														</li>
 														<li>
-															<div class="main-border-button border-no-active">
+															<div class="main-button">
 																<a href={{'/cancelareserva?id_reserva=' ~ reserva.id}}>Cancelar</a>
 															</div>
 														</li>
@@ -217,7 +176,7 @@
 											{% endfor %}
 										{% else %}
 											<h4>
-												<center>Sin reservas, de momento. ¡Anímate!
+												<center>Sin reservas de momento. ¡Anímate!
 												</center>
 											</h4>
 										{% endif %}

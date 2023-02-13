@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Los juegos hermanos
+{% endblock %}
+{% block header %}
+{{parent()}}
+{% endblock %}
+{% block body %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div
+					class="page-content">
+					<!-- ***** Most Popular Start ***** -->
+					<div class="most-popular">
+						<center>
+							<div class="col-lg-3 col-sm-6">
+								<div class="item">
+									{% for message in app.flashes('Error') %}
+										<div class="alert alert-success">
+											{{ message }}
+										</div>
+									{% endfor %}
+									{% for message in app.flashes('Errordate') %}
+										<div class="alert alert-success">
+											{{ message }}
+										</div>
+									{% endfor %}
+									<h3>
+										<em>¡Crea un evento!</em>
+									</h3>
+									<br><br>
+									{{ form_start(form) }}
+									{{ form_label(form.Nombre)}}
+									{{ form_widget(form.Nombre)}}
+									{{ form_errors(form.Nombre)}}
+									<br><br>
+									{{ form_label(form.Descripcion)}}
+									{{ form_widget(form.Descripcion)}}
+									{{ form_errors(form.Descripcion)}}<br><br>
+									{{ form_label(form.Fecha_ini)}}
+									{{ form_widget(form.Fecha_ini)}}
+									{{ form_errors(form.Fecha_ini)}}<br><br>
+									{{ form_label(form.Fecha_fin)}}
+									{{ form_widget(form.Fecha_fin)}}
+									{{ form_errors(form.Fecha_fin)}}<br><br>
+									<center>
+										<button type="submit" class="main-button-new">Siguiente</button>
+									</center>
+									{{ form_end(form) }}
+								</div>
+							</div>
+							<center></div>
+							<!-- ***** Most Popular End ***** -->
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endblock %}
+

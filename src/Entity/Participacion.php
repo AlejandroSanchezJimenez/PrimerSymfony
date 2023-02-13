@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipacionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ParticipacionRepository::class)]
@@ -24,9 +26,14 @@ class Participacion
     #[ORM\Column]
     private ?bool $Asiste = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Participaciones')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Usuario $idUsuario = null;
+    #[ORM\ManyToMany(targetEntity: Usuario::class, inversedBy: 'Participaciones')]
+    private Collection $idUsuario;
+
+    public function __construct()
+    {
+        $this->idUsuario = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -69,14 +76,18 @@ class Participacion
         return $this;
     }
 
-    public function getIdUsuario(): ?Usuario
+    public function addIdUsuario(Usuario $idUsuario): self
     {
-        return $this->idUsuario;
+        if (!$this->idUsuario->contains($idUsuario)) {
+            $this->idUsuario->add($idUsuario);
+        }
+
+        return $this;
     }
 
-    public function setIdUsuario(?Usuario $idUsuario): self
+    public function removeIdUsuario(Usuario $idUsuario): self
     {
-        $this->idUsuario = $idUsuario;
+        $this->idUsuario->removeElement($idUsuario);
 
         return $this;
     }

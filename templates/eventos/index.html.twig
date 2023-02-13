@@ -1,20 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello EventosController!{% endblock %}
+{% block title %}
+	Juegos de mesa
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	{% block header %}
+		{{parent()}}
+	{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="page-content">
+					{% if app.user!=null %}
+						{% if "ROLE_ADMIN" in app.user.roles %}
+						<center>
+							<div class="main-button">
+								<a href='/evento/create'>Crear eventos</a>
+							</div>
+						</center>
+						{% endif %}
+					{% endif %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/aleja/OneDrive/Escritorio/DAW/2_DAW/DWESE/symfony/ejemplo1/src/Controller/EventosController.php'|file_link(0) }}">src/Controller/EventosController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/aleja/OneDrive/Escritorio/DAW/2_DAW/DWESE/symfony/ejemplo1/templates/eventos/index.html.twig'|file_link(0) }}">templates/eventos/index.html.twig</a></code></li>
-    </ul>
-</div>
-{% endblock %}
+					<!-- ***** Gaming Library Start ***** -->
+					<div class="gaming-library profile-library">
+						<div class="col-lg-12">
+							<div class="heading-section">
+								<h4>
+									<em>Eventos</em>
+									disponibles</h4>
+							</div>
+							{% for evento in eventos %}
+							<div class="item">
+							<center>
+								<ul>
+									<li><img src={{ asset('Juego_de_mesa_fotos/' ~ evento.juego.Nombre ~ 'caratula.png') }} alt="" class="templatemo-item"></li>
+									<li>
+										<h4>Nombre</h4>
+										<span>{{evento.nombre}}</span>
+									</li>
+									<li>
+										<h4>Descripción</h4>
+										<span>{{evento.Descripcion}}</span>
+									</li>
+									<li>
+										<h4>Fecha de inicio</h4>
+										<span>{{evento.fechaini|date('d-m-y')}}</span>
+									</li>
+									<li>
+										<h4>Fecha de fin</h4>
+										<span>{{evento.fechafin|date('d-m-y')}}</span>
+									</li>
+									<li>
+										<div class="main-button">
+											<a href="#">Participar</a>
+										</div>
+									</li>
+								</ul>
+								</center>
+							</div>
+							{% endfor %}
+							
+						</div>
+					</div>
+
+
+				{% endblock %}
+

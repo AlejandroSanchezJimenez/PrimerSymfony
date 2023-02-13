@@ -54,9 +54,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'idUsuario', targetEntity: Reserva::class)]
     private Collection $Reservas;
 
-    #[ORM\OneToMany(mappedBy: 'idUsuario', targetEntity: Participacion::class, orphanRemoval: true)]
-    private Collection $Participaciones;
-
     #[ORM\Column(length: 30)]
     #[Assert\NotBlank]
     #[Assert\Length(
@@ -107,9 +104,16 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?int $Num_telegram = null;
 
+    #[ORM\OneToMany(mappedBy: 'Invitados', targetEntity: Evento::class, orphanRemoval: true)]
+    private Collection $Eventos;
+
+    #[ORM\ManyToMany(targetEntity: Participacion::class, mappedBy: 'idUsuario')]
+    private Collection $Participaciones;
+
     public function __construct()
     {
         $this->Reservas = new ArrayCollection();
+        $this->Eventos = new ArrayCollection();
         $this->Participaciones = new ArrayCollection();
     }
 
@@ -213,36 +217,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Participacion>
-     */
-    public function getParticipaciones(): Collection
-    {
-        return $this->Participaciones;
-    }
-
-    public function addParticipacione(Participacion $participacione): self
-    {
-        if (!$this->Participaciones->contains($participacione)) {
-            $this->Participaciones->add($participacione);
-            $participacione->setIdUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipacione(Participacion $participacione): self
-    {
-        if ($this->Participaciones->removeElement($participacione)) {
-            // set the owning side to null (unless already changed)
-            if ($participacione->getIdUsuario() === $this) {
-                $participacione->setIdUsuario(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getNombre(): ?string
     {
         return $this->Nombre;
@@ -299,6 +273,41 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNumTelegram(int $Num_telegram): self
     {
         $this->Num_telegram = $Num_telegram;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evento>
+     */
+    public function getEventos(): Collection
+    {
+        return $this->Eventos;
+    }
+
+    /**
+     * @return Collection<int, Participacion>
+     */
+    public function getParticipaciones(): Collection
+    {
+        return $this->Participaciones;
+    }
+
+    public function addParticipacione(Participacion $participacione): self
+    {
+        if (!$this->Participaciones->contains($participacione)) {
+            $this->Participaciones->add($participacione);
+            $participacione->addIdUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipacione(Participacion $participacione): self
+    {
+        if ($this->Participaciones->removeElement($participacione)) {
+            $participacione->removeIdUsuario($this);
+        }
 
         return $this;
     }

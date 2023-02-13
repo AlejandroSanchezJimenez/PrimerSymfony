@@ -1,46 +1,54 @@
 <?php
 
+
 namespace App\Repository;
 
-use App\Entity\JuegosdeEvento;
+
+use App\Entity\JuegosDeEvento;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 /**
- * @extends ServiceEntityRepository<JuegosdeEvento>
+ * @extends ServiceEntityRepository<JuegosDeEvento>
  *
- * @method JuegosdeEvento|null find($id, $lockMode = null, $lockVersion = null)
- * @method JuegosdeEvento|null findOneBy(array $criteria, array $orderBy = null)
- * @method JuegosdeEvento[]    findAll()
- * @method JuegosdeEvento[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method JuegosDeEvento|null find($id, $lockMode = null, $lockVersion = null)
+ * @method JuegosDeEvento|null findOneBy(array $criteria, array $orderBy = null)
+ * @method JuegosDeEvento[]    findAll()
+ * @method JuegosDeEvento[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class JuegosdeEventoRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, JuegosdeEvento::class);
+        parent::__construct($registry, JuegosDeEvento::class);
     }
 
-    public function save(JuegosdeEvento $entity, bool $flush = false): void
+
+    public function save(JuegosDeEvento $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }
     }
 
-    public function remove(JuegosdeEvento $entity, bool $flush = false): void
+
+    public function remove(JuegosDeEvento $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }
     }
 
+
 //    /**
-//     * @return JuegosdeEvento[] Returns an array of JuegosdeEvento objects
+//     * @return JuegosDeEvento[] Returns an array of JuegosDeEvento objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +62,8 @@ class JuegosdeEventoRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?JuegosdeEvento
+
+//    public function findOneBySomeField($value): ?JuegosDeEvento
 //    {
 //        return $this->createQueryBuilder('j')
 //            ->andWhere('j.exampleField = :val')
@@ -64,3 +73,8 @@ class JuegosdeEventoRepository extends ServiceEntityRepository
 //        ;
 //    }
 }
+
+
+
+
+

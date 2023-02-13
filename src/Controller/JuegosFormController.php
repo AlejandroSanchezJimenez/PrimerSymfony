@@ -48,8 +48,8 @@ class JuegosFormController extends AbstractController
             return $this->redirectToRoute('app_juegos');
         }
         
-        return $this->render('juegos_form/index.html.twig', [
-            'form' => $form,
+        return $this->render('añadejuegos/index.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

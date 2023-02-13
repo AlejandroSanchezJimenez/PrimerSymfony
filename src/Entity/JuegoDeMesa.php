@@ -71,9 +71,6 @@ class JuegoDeMesa
     #[ORM\OneToMany(mappedBy: 'Juego', targetEntity: Reserva::class, orphanRemoval: true)]
     private Collection $Juegos_reservados;
 
-    #[ORM\OneToMany(mappedBy: 'Juego', targetEntity: JuegosdeEvento::class, orphanRemoval: true)]
-    private Collection $Juegos;
-
     #[ORM\Column(type: Types::BLOB)]
     // #[Assert\Image(
     //     minWidth: 100,
@@ -83,10 +80,17 @@ class JuegoDeMesa
     // )]
     private $Tablero = null;
 
+    #[ORM\OneToMany(mappedBy: 'Juego', targetEntity: Evento::class, orphanRemoval: true)]
+    private Collection $Eventos;
+
+    #[ORM\ManyToMany(targetEntity: JuegosDeEvento::class, mappedBy: 'Juegos')]
+    private Collection $juegosDeEventos;
+
     public function __construct()
     {
         $this->Juegos_reservados = new ArrayCollection();
-        $this->Juegos = new ArrayCollection();
+        $this->Eventos = new ArrayCollection();
+        $this->juegosDeEventos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,36 +212,6 @@ class JuegoDeMesa
         return $this;
     }
 
-    /**
-     * @return Collection<int, JuegosdeEvento>
-     */
-    public function getJuegos(): Collection
-    {
-        return $this->Juegos;
-    }
-
-    public function addJuego(JuegosdeEvento $juego): self
-    {
-        if (!$this->Juegos->contains($juego)) {
-            $this->Juegos->add($juego);
-            $juego->setJuego($this);
-        }
-
-        return $this;
-    }
-
-    public function removeJuego(JuegosdeEvento $juego): self
-    {
-        if ($this->Juegos->removeElement($juego)) {
-            // set the owning side to null (unless already changed)
-            if ($juego->getJuego() === $this) {
-                $juego->setJuego(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getTablero()
     {
         return $this->Tablero;
@@ -246,6 +220,59 @@ class JuegoDeMesa
     public function setTablero($Tablero): self
     {
         $this->Tablero = $Tablero;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evento>
+     */
+    public function getEventos(): Collection
+    {
+        return $this->Eventos;
+    }
+
+    public function addEvento(Evento $evento): self
+    {
+        if (!$this->Eventos->contains($evento)) {
+            $this->Eventos->add($evento);
+        }
+
+        return $this;
+    }
+
+    public function removeEvento(Evento $evento): self
+    {
+        if ($this->Eventos->removeElement($evento)) {
+            // set the owning side to null (unless already changed)
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JuegosDeEvento>
+     */
+    public function getJuegosDeEventos(): Collection
+    {
+        return $this->juegosDeEventos;
+    }
+
+    public function addJuegosDeEvento(JuegosDeEvento $juegosDeEvento): self
+    {
+        if (!$this->juegosDeEventos->contains($juegosDeEvento)) {
+            $this->juegosDeEventos->add($juegosDeEvento);
+            $juegosDeEvento->addJuego($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJuegosDeEvento(JuegosDeEvento $juegosDeEvento): self
+    {
+        if ($this->juegosDeEventos->removeElement($juegosDeEvento)) {
+            $juegosDeEvento->removeJuego($this);
+        }
 
         return $this;
     }

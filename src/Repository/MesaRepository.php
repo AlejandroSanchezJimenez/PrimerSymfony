@@ -30,6 +30,17 @@ class MesaRepository extends ServiceEntityRepository
         }
     }
 
+    public function toArray(Mesa $mesa) :array
+    {
+        return [
+            $id=$mesa->getId(),
+            $anchura=$mesa->getAnchura(),
+            $longitud=$mesa->getLongitud(),
+            $x=$mesa->getX(),
+            $y=$mesa->getY()
+        ];
+    }
+
     public function remove(Mesa $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
@@ -62,6 +73,16 @@ class MesaRepository extends ServiceEntityRepository
            ->setParameter('val2',$value2)
            ->getQuery()
            ->getResult()
+       ;
+   }
+
+   public function findByField($value): Mesa
+   {
+       return $this->createQueryBuilder('m')
+           ->andWhere('m.id = :val')
+           ->setParameter('val', $value)
+           ->getQuery()
+           ->getOneOrNullResult()
        ;
    }
 }

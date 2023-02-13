@@ -29,28 +29,20 @@ class Evento
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
-    private ?string $Descripción = null;
+    private ?string $Descripcion = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
-    #[Assert\LessThanOrEqual(
-        propertyPath: "Fecha_fin"
-    )]
-    #[Assert\Date]
     private ?\DateTimeInterface $Fecha_ini = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
-    #[Assert\GreaterThanOrEqual(
-        propertyPath: "Fecha_ini"
-    )]
-    #[Assert\Date]
     private ?\DateTimeInterface $Fecha_fin = null;
 
     #[ORM\OneToMany(mappedBy: 'Evento', targetEntity: Participacion::class, orphanRemoval: true)]
     private Collection $ParticipanEvento;
 
-    #[ORM\OneToMany(mappedBy: 'Evento', targetEntity: JuegosdeEvento::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'Evento', targetEntity: JuegosDeEvento::class, orphanRemoval: true)]
     private Collection $Eventos;
 
     public function __construct()
@@ -76,14 +68,14 @@ class Evento
         return $this;
     }
 
-    public function getDescripción(): ?string
+    public function getDescripcion(): ?string
     {
-        return $this->Descripción;
+        return $this->Descripcion;
     }
 
-    public function setDescripción(string $Descripción): self
+    public function setDescripcion(string $Descripcion): self
     {
-        $this->Descripción = $Descripción;
+        $this->Descripcion = $Descripcion;
 
         return $this;
     }
@@ -136,36 +128,6 @@ class Evento
             // set the owning side to null (unless already changed)
             if ($participanEvento->getEvento() === $this) {
                 $participanEvento->setEvento(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, JuegosdeEvento>
-     */
-    public function getEventos(): Collection
-    {
-        return $this->Eventos;
-    }
-
-    public function addEvento(JuegosdeEvento $evento): self
-    {
-        if (!$this->Eventos->contains($evento)) {
-            $this->Eventos->add($evento);
-            $evento->setEvento($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvento(JuegosdeEvento $evento): self
-    {
-        if ($this->Eventos->removeElement($evento)) {
-            // set the owning side to null (unless already changed)
-            if ($evento->getEvento() === $this) {
-                $evento->setEvento(null);
             }
         }
 

@@ -42,17 +42,29 @@ class EventoRepository extends ServiceEntityRepository
 //    /**
 //     * @return Evento[] Returns an array of Evento objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function findByExampleField($value): array
+   {
+       return $this->createQueryBuilder('e')
+           ->andWhere('e.Fecha_ini >= :val')
+           ->setParameter('val', $value)
+           ->orderBy('e.id', 'ASC')
+        //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+   public function findByNombre($value): Evento
+   {
+       return $this->createQueryBuilder('e')
+           ->andWhere('e.Nombre = :val')
+           ->setParameter('val', $value)
+        //    ->orderBy('e.id', 'ASC')
+        //    ->setMaxResults(10)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?Evento
 //    {
