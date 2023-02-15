@@ -110,11 +110,19 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Participacion::class, mappedBy: 'idUsuario')]
     private Collection $Participaciones;
 
+    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'ParticipanEvento')]
+    private Collection $eventos;
+
+    #[ORM\OneToMany(mappedBy: 'Usuario', targetEntity: Participacion::class, orphanRemoval: true)]
+    private Collection $participacions;
+
     public function __construct()
     {
         $this->Reservas = new ArrayCollection();
         $this->Eventos = new ArrayCollection();
         $this->Participaciones = new ArrayCollection();
+        $this->eventos = new ArrayCollection();
+        $this->participacions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -307,6 +315,55 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->Participaciones->removeElement($participacione)) {
             $participacione->removeIdUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function addEvento(Evento $evento): self
+    {
+        if (!$this->eventos->contains($evento)) {
+            $this->eventos->add($evento);
+            $evento->addParticipanEvento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvento(Evento $evento): self
+    {
+        if ($this->eventos->removeElement($evento)) {
+            $evento->removeParticipanEvento($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participacion>
+     */
+    public function getParticipacions(): Collection
+    {
+        return $this->participacions;
+    }
+
+    public function addParticipacion(Participacion $participacion): self
+    {
+        if (!$this->participacions->contains($participacion)) {
+            $this->participacions->add($participacion);
+            $participacion->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipacion(Participacion $participacion): self
+    {
+        if ($this->participacions->removeElement($participacion)) {
+            // set the owning side to null (unless already changed)
+            if ($participacion->getUsuario() === $this) {
+                $participacion->setUsuario(null);
+            }
         }
 
         return $this;

@@ -17,7 +17,7 @@
 						{% if "ROLE_ADMIN" in app.user.roles %}
 						<center>
 							<div class="main-button">
-								<a href='/evento/create'>Crear eventos</a>
+								<a href='/evento/create'>Crear evento</a>
 							</div>
 						</center>
 						{% endif %}
@@ -29,13 +29,12 @@
 							<div class="heading-section">
 								<h4>
 									<em>Eventos</em>
-									disponibles</h4>
+									a los que me han invitado</h4>
 							</div>
 							{% for evento in eventos %}
 							<div class="item">
-							<center>
+								<center>
 								<ul>
-									<li><img src={{ asset('Juego_de_mesa_fotos/' ~ evento.juego.Nombre ~ 'caratula.png') }} alt="" class="templatemo-item"></li>
 									<li>
 										<h4>Nombre</h4>
 										<span>{{evento.nombre}}</span>
@@ -46,15 +45,16 @@
 									</li>
 									<li>
 										<h4>Fecha de inicio</h4>
-										<span>{{evento.fechaini|date('d-m-y')}}</span>
-									</li>
-									<li>
-										<h4>Fecha de fin</h4>
-										<span>{{evento.fechafin|date('d-m-y')}}</span>
+										<span>{{evento.fechaevento|date('d-m-y')}}</span>
 									</li>
 									<li>
 										<div class="main-button">
-											<a href="#">Participar</a>
+											<a href="#">Asistiré</a>
+										</div>
+									</li>
+									<li>
+										<div class="main-button">
+											<a href="#">No asistiré</a>
 										</div>
 									</li>
 								</ul>

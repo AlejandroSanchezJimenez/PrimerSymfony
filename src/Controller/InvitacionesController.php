@@ -34,15 +34,15 @@ class InvitacionesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
-            $allinvitaciones=$form->get('idUsuario')->getData();
+            $arrayUsers=$form->get('ParticipanEvento')->getData();
+                foreach ($arrayUsers as $user) {
+                    $participacion->setUsuario($user);
+                    $participacion->setEvento($evento);
 
-            foreach ($allinvitaciones as $invitacion) {
-                $participacion->addIdUsuario($invitacion);
-                $participacion->setEvento($evento);
+                    $em->persist($participacion);
+                }
 
-                $em->persist($participacion);
                 $em->flush();
-            }
 
             return $this->redirectToRoute('/eventos');
             $this->addFlash('Exito', 'Reserva realizada con éxito, te esperamos.');

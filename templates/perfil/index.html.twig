@@ -95,14 +95,14 @@
 						<div class="col-lg-12">
 							<div class="heading-section">
 								<h4>
-									<em>Eventos</em>
-									jugados</h4>
+									<em>Eventos </em>
+									en los que he participado</h4>
 							</div>
 							{% if eventos!=null %}
 								{% for evento in eventos %}
 									<div class="item">
+									<center>
 										<ul>
-											<li><img src="rc="{{ asset('Juego_de_mesa_fotos/' ~ evento.juego.Nombre ~ 'caratula.png') }}"" alt="" class="templatemo-item"></li>
 											<li>
 												<h4>Nombre</h4>
 												<span>{{evento.nombre}}</span>
@@ -119,12 +119,8 @@
 												<h4>Fecha de fin</h4>
 												<span>{{evento.fechafin|date('d-m-y')}}</span>
 											</li>
-											<li>
-												<div class="main-button">
-													<a href="#">Participar</a>
-												</div>
-											</li>
 										</ul>
+									</center>
 									</div>
 								{% endfor %}
 							{% else %}

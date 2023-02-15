@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\JuegosDeEvento;
 use App\Entity\JuegoDeMesa;
 use App\Repository\JuegoDeMesaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,13 +23,13 @@ class JuegosdeEventoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Juego', EntityType::class, [
-                'class' => JuegoDeMesa::class,
-                'choices' => $this->juego->findAll(),
-                'choice_label' => 'Nombre',
-                'label' => 'Juego del evento',
-                'multiple' => true
-            ])
+        ->add('Juego', EntityType::class, [
+            'class' => JuegoDeMesa::class,
+            'choices' => $this->juego->findAll(),
+            'choice_label' => 'Nombre',
+            'label' => 'Juego del evento',
+            'multiple' => true
+        ])
         ;
     }
 

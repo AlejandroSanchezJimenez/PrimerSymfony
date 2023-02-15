@@ -10,11 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\Mailer;
 
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, Mailer $mailer): Response
     {
         $user = new Usuario();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -37,9 +38,12 @@ class RegistrationController extends AbstractController
             $user->setEmail($form->get('Email')->getData());
             $user->setRoles(array("ROLE_USER"));
             
+            $mailer->sendWelcomeMessage($user);
 
             $entityManager->persist($user);
             $entityManager->flush();
+
+            
 
             return $this->redirectToRoute('landing');
         }

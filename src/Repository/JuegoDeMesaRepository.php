@@ -39,7 +39,7 @@ class JuegoDeMesaRepository extends ServiceEntityRepository
         }
     }
 
-    public function findAllJuegos(): array
+    public function findAllJuegos(): JuegoDeMesa
     {
         return $this->createQueryBuilder('j')
             //    ->andWhere('j.exampleField = :val')

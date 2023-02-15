@@ -33,22 +33,21 @@ class Evento
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
-    private ?\DateTimeInterface $Fecha_ini = null;
+    private ?\DateTimeInterface $Fecha_evento = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\NotBlank]
-    private ?\DateTimeInterface $Fecha_fin = null;
+    #[ORM\Column(nullable: true)]
+    private ?bool $Asiste = null;
 
-    #[ORM\OneToMany(mappedBy: 'Evento', targetEntity: Participacion::class, orphanRemoval: true)]
-    private Collection $ParticipanEvento;
+    #[ORM\OneToMany(mappedBy: 'evento', targetEntity: JuegosDeEvento::class, orphanRemoval: true)]
+    private Collection $JuegosDeEvento;
 
-    #[ORM\OneToMany(mappedBy: 'Evento', targetEntity: JuegosDeEvento::class, orphanRemoval: true)]
-    private Collection $Eventos;
+    #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Participacion::class, orphanRemoval: true)]
+    private Collection $Participacion;
 
     public function __construct()
     {
-        $this->ParticipanEvento = new ArrayCollection();
-        $this->Eventos = new ArrayCollection();
+        $this->JuegosDeEvento = new ArrayCollection();
+        $this->Participacion = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,26 +79,48 @@ class Evento
         return $this;
     }
 
-    public function getFechaIni(): ?\DateTimeInterface
+    public function getFechaEvento(): ?\DateTimeInterface
     {
-        return $this->Fecha_ini;
+        return $this->Fecha_evento;
     }
 
-    public function setFechaIni(\DateTimeInterface $Fecha_ini): self
+    public function setFechaEvento(\DateTimeInterface $Fecha_evento): self
     {
-        $this->Fecha_ini = $Fecha_ini;
+        $this->Fecha_evento = $Fecha_evento;
 
         return $this;
     }
 
-    public function getFechaFin(): ?\DateTimeInterface
+    public function isAsiste(): ?bool
     {
-        return $this->Fecha_fin;
+        return $this->Asiste;
     }
 
-    public function setFechaFin(\DateTimeInterface $Fecha_fin): self
+    public function setAsiste(?bool $Asiste): self
     {
-        $this->Fecha_fin = $Fecha_fin;
+        $this->Asiste = $Asiste;
+
+        return $this;
+    }
+
+    public function addJuegosDeEvento(JuegosDeEvento $juegosDeEvento): self
+    {
+        if (!$this->JuegosDeEvento->contains($juegosDeEvento)) {
+            $this->JuegosDeEvento->add($juegosDeEvento);
+            $juegosDeEvento->setEvento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJuegosDeEvento(JuegosDeEvento $juegosDeEvento): self
+    {
+        if ($this->JuegosDeEvento->removeElement($juegosDeEvento)) {
+            // set the owning side to null (unless already changed)
+            if ($juegosDeEvento->getEvento() === $this) {
+                $juegosDeEvento->setEvento(null);
+            }
+        }
 
         return $this;
     }
@@ -107,27 +128,27 @@ class Evento
     /**
      * @return Collection<int, Participacion>
      */
-    public function getParticipanEvento(): Collection
+    public function getParticipacion(): Collection
     {
-        return $this->ParticipanEvento;
+        return $this->Participacion;
     }
 
-    public function addParticipanEvento(Participacion $participanEvento): self
+    public function addParticipacion(Participacion $participacion): self
     {
-        if (!$this->ParticipanEvento->contains($participanEvento)) {
-            $this->ParticipanEvento->add($participanEvento);
-            $participanEvento->setEvento($this);
+        if (!$this->Participacion->contains($participacion)) {
+            $this->Participacion->add($participacion);
+            $participacion->setEvento($this);
         }
 
         return $this;
     }
 
-    public function removeParticipanEvento(Participacion $participanEvento): self
+    public function removeParticipacion(Participacion $participacion): self
     {
-        if ($this->ParticipanEvento->removeElement($participanEvento)) {
+        if ($this->Participacion->removeElement($participacion)) {
             // set the owning side to null (unless already changed)
-            if ($participanEvento->getEvento() === $this) {
-                $participanEvento->setEvento(null);
+            if ($participacion->getEvento() === $this) {
+                $participacion->setEvento(null);
             }
         }
 

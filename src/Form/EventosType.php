@@ -7,10 +7,12 @@ use App\Entity\Usuario;
 use App\Entity\JuegoDeMesa;
 use App\Repository\JuegoDeMesaRepository;
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class EventosType extends AbstractType
 {
@@ -28,25 +30,23 @@ class EventosType extends AbstractType
         $builder
             ->add('Nombre')
             ->add('Descripcion')
-            ->add('Fecha_ini', DateType::class, [
+            ->add('Fecha_Evento', DateType::class, [
                 'widget' => 'single_text'
             ])
-            ->add('Fecha_fin', DateType::class, [
-                'widget' => 'single_text'
+            ->add('JuegosDeEvento', EntityType::class, [
+                'class' => JuegoDeMesa::class,
+                'choices' => $this->juego->findAll(),
+                'choice_label' => 'Nombre',
+                'label' => 'Juego del evento',
+                'multiple' => true
             ])
-            // ->add('Juego', EntityType::class, [
-            //     'class' => JuegoDeMesa::class,
-            //     'choices' => $this->juego->findAll(),
-            //     'choice_label' => 'Nombre',
-            //     'label' => 'Juego del evento'
-            // ])
-            // ->add('Invitados', EntityType::class, [
-            //     'class' => Usuario::class,
-            //     'choices' => $this->usuario->findAll(),
-            //     'choice_label' => 'Nickname',
-            //     'label' => 'Invitados al evento',
-            //     'multiple' => true
-            // ])
+            ->add('Participacion', EntityType::class, [
+                'class' => Usuario::class,
+                'choices' => $this->usuario->findAll(),
+                'choice_label' => 'Nickname',
+                'label' => 'Usuarios invitados',
+                'multiple' => true
+            ])
         ;
     }
 

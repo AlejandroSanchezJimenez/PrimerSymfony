@@ -19,21 +19,16 @@ class Participacion
     #[ORM\JoinColumn(nullable: false)]
     private ?Evento $Evento = null;
 
-    // #[ORM\ManyToOne(inversedBy: 'ParticipanUsuario')]
-    // #[ORM\JoinColumn(nullable: false)]
-    // private ?Usuario $Usuario = null;
-
     #[ORM\Column]
     private ?bool $Asiste = null;
 
-    #[ORM\ManyToMany(targetEntity: Usuario::class, inversedBy: 'Participaciones')]
-    private Collection $idUsuario;
+    #[ORM\ManyToOne(inversedBy: 'participacions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Usuario $Usuario = null;
 
-    public function __construct()
-    {
-        $this->idUsuario = new ArrayCollection();
-    }
-
+    #[ORM\ManyToOne(inversedBy: 'Participacion')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Evento $evento = null;
 
     public function getId(): ?int
     {
@@ -52,18 +47,6 @@ class Participacion
         return $this;
     }
 
-    // public function getUsuario(): ?Usuario
-    // {
-    //     return $this->Usuario;
-    // }
-
-    // public function setUsuario(?Usuario $Usuario): self
-    // {
-    //     $this->Usuario = $Usuario;
-
-    //     return $this;
-    // }
-
     public function isAsiste(): ?bool
     {
         return $this->Asiste;
@@ -76,18 +59,14 @@ class Participacion
         return $this;
     }
 
-    public function addIdUsuario(Usuario $idUsuario): self
+    public function getUsuario(): ?Usuario
     {
-        if (!$this->idUsuario->contains($idUsuario)) {
-            $this->idUsuario->add($idUsuario);
-        }
-
-        return $this;
+        return $this->Usuario;
     }
 
-    public function removeIdUsuario(Usuario $idUsuario): self
+    public function setUsuario(?Usuario $Usuario): self
     {
-        $this->idUsuario->removeElement($idUsuario);
+        $this->Usuario = $Usuario;
 
         return $this;
     }

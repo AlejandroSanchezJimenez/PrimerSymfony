@@ -45,7 +45,7 @@ class EventoRepository extends ServiceEntityRepository
    public function findByExampleField($value): array
    {
        return $this->createQueryBuilder('e')
-           ->andWhere('e.Fecha_ini >= :val')
+           ->andWhere('e.Fecha_evento >= :val')
            ->setParameter('val', $value)
            ->orderBy('e.id', 'ASC')
         //    ->setMaxResults(10)
@@ -63,6 +63,20 @@ class EventoRepository extends ServiceEntityRepository
         //    ->setMaxResults(10)
            ->getQuery()
            ->getOneOrNullResult()
+       ;
+   }
+
+   public function findIfAsiste($id,$date): array
+   {
+       return $this->createQueryBuilder('e')
+           ->andWhere('e.ParticipanEvento = :val')
+           ->andWhere('e.Fecha_evento >= :val')
+           ->setParameter('val', $id)
+           ->setParameter('val2', $date)
+           ->orderBy('e.id', 'ASC')
+        //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
        ;
    }
 

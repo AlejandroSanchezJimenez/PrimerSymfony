@@ -21,13 +21,13 @@ class InvitacionesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('idUsuario', EntityType::class, [
-                'class' => Usuario::class,
-                'choices' => $this->usuario->findAll(),
-                'choice_label' => 'Nickname',
-                'label' => 'Invitados al evento',
-                'multiple' => true
-            ])
+        ->add('Usuario', EntityType::class, [
+            'class' => Usuario::class,
+            'choices' => $this->usuario->findAll(),
+            'choice_label' => 'Nickname',
+            'label' => 'Usuarios invitados',
+            'multiple' => true
+        ])
         ;
     }
 

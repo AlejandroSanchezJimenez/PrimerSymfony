@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Evento;
+use App\Entity\JuegoDeMesa;
 use App\Form\EventosType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,18 +37,26 @@ class EventoFormController extends AbstractController
                 $this->addFlash('Errordate', 'Debe elegir una fecha posterior a la de inicio');
             }
             else {
-                $session = $request->getSession();
-                $session->set('NombreEvento', $form->get('Nombre')->getData()); 
-                
                 $evento->setNombre($form->get('Nombre')->getData());
                 $evento->setDescripcion($form->get('Descripcion')->getData());
-                $evento->setFechaIni($form->get('Fecha_ini')->getData());
-                $evento->setFechaFin($form->get('Fecha_fin')->getData());
+                $evento->setFechaEvento($form->get('Fechaevento')->getData());
+
+                $arrayJuegos=$form->get('JuegosDeEvento')->getData();
+                foreach ($arrayJuegos as $juego) {
+                    $evento->addJuegosDeEvento($juego);
+                }
+
+                $arrayUsers=$form->get('Participacion')->getData();
+                foreach ($arrayUsers as $user) {
+                    $evento->addParticipacion($user);
+                }
+
+                
                 
                 $em->persist($evento);
                 $em->flush();
 
-                return $this->redirectToRoute('app_juegosde_evento');
+                return $this->redirectToRoute('app_eventos');
                 $this->addFlash('Exito', 'Reserva realizada con éxito, te esperamos.');
             }
             

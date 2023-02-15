@@ -68,9 +68,6 @@ class JuegoDeMesa
     )]
     private ?int $Max_jug = null;
 
-    #[ORM\OneToMany(mappedBy: 'Juego', targetEntity: Reserva::class, orphanRemoval: true)]
-    private Collection $Juegos_reservados;
-
     #[ORM\Column(type: Types::BLOB)]
     // #[Assert\Image(
     //     minWidth: 100,
@@ -83,14 +80,13 @@ class JuegoDeMesa
     #[ORM\OneToMany(mappedBy: 'Juego', targetEntity: Evento::class, orphanRemoval: true)]
     private Collection $Eventos;
 
-    #[ORM\ManyToMany(targetEntity: JuegosDeEvento::class, mappedBy: 'Juegos')]
-    private Collection $juegosDeEventos;
+    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'JuegosDeEventos')]
+    private Collection $JuegosenEventos;
 
     public function __construct()
     {
-        $this->Juegos_reservados = new ArrayCollection();
         $this->Eventos = new ArrayCollection();
-        $this->juegosDeEventos = new ArrayCollection();
+        $this->JuegosenEventos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,36 +178,6 @@ class JuegoDeMesa
         return $this;
     }
 
-    /**
-     * @return Collection<int, Reserva>
-     */
-    public function getJuegosReservados(): Collection
-    {
-        return $this->Juegos_reservados;
-    }
-
-    public function addJuegosReservado(Reserva $juegosReservado): self
-    {
-        if (!$this->Juegos_reservados->contains($juegosReservado)) {
-            $this->Juegos_reservados->add($juegosReservado);
-            $juegosReservado->setJuego($this);
-        }
-
-        return $this;
-    }
-
-    public function removeJuegosReservado(Reserva $juegosReservado): self
-    {
-        if ($this->Juegos_reservados->removeElement($juegosReservado)) {
-            // set the owning side to null (unless already changed)
-            if ($juegosReservado->getJuego() === $this) {
-                $juegosReservado->setJuego(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getTablero()
     {
         return $this->Tablero;
@@ -251,27 +217,27 @@ class JuegoDeMesa
     }
 
     /**
-     * @return Collection<int, JuegosDeEvento>
+     * @return Collection<int, Evento>
      */
-    public function getJuegosDeEventos(): Collection
+    public function getJuegosenEventos(): Collection
     {
-        return $this->juegosDeEventos;
+        return $this->JuegosenEventos;
     }
 
-    public function addJuegosDeEvento(JuegosDeEvento $juegosDeEvento): self
+    public function addJuegosenEvento(Evento $juegosenEvento): self
     {
-        if (!$this->juegosDeEventos->contains($juegosDeEvento)) {
-            $this->juegosDeEventos->add($juegosDeEvento);
-            $juegosDeEvento->addJuego($this);
+        if (!$this->JuegosenEventos->contains($juegosenEvento)) {
+            $this->JuegosenEventos->add($juegosenEvento);
+            $juegosenEvento->addJuegosDeEvento($this);
         }
 
         return $this;
     }
 
-    public function removeJuegosDeEvento(JuegosDeEvento $juegosDeEvento): self
+    public function removeJuegosenEvento(Evento $juegosenEvento): self
     {
-        if ($this->juegosDeEventos->removeElement($juegosDeEvento)) {
-            $juegosDeEvento->removeJuego($this);
+        if ($this->JuegosenEventos->removeElement($juegosenEvento)) {
+            $juegosenEvento->removeJuegosDeEvento($this);
         }
 
         return $this;
