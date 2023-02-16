@@ -77,16 +77,12 @@ class JuegoDeMesa
     // )]
     private $Tablero = null;
 
-    #[ORM\OneToMany(mappedBy: 'Juego', targetEntity: Evento::class, orphanRemoval: true)]
-    private Collection $Eventos;
-
-    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'JuegosDeEventos')]
-    private Collection $JuegosenEventos;
+    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'Juegos_de_evento')]
+    private Collection $eventos;
 
     public function __construct()
     {
-        $this->Eventos = new ArrayCollection();
-        $this->JuegosenEventos = new ArrayCollection();
+        $this->eventos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,13 +191,14 @@ class JuegoDeMesa
      */
     public function getEventos(): Collection
     {
-        return $this->Eventos;
+        return $this->eventos;
     }
 
     public function addEvento(Evento $evento): self
     {
-        if (!$this->Eventos->contains($evento)) {
-            $this->Eventos->add($evento);
+        if (!$this->eventos->contains($evento)) {
+            $this->eventos->add($evento);
+            $evento->addJuegosDeEvento($this);
         }
 
         return $this;
@@ -209,35 +206,8 @@ class JuegoDeMesa
 
     public function removeEvento(Evento $evento): self
     {
-        if ($this->Eventos->removeElement($evento)) {
-            // set the owning side to null (unless already changed)
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Evento>
-     */
-    public function getJuegosenEventos(): Collection
-    {
-        return $this->JuegosenEventos;
-    }
-
-    public function addJuegosenEvento(Evento $juegosenEvento): self
-    {
-        if (!$this->JuegosenEventos->contains($juegosenEvento)) {
-            $this->JuegosenEventos->add($juegosenEvento);
-            $juegosenEvento->addJuegosDeEvento($this);
-        }
-
-        return $this;
-    }
-
-    public function removeJuegosenEvento(Evento $juegosenEvento): self
-    {
-        if ($this->JuegosenEventos->removeElement($juegosenEvento)) {
-            $juegosenEvento->removeJuegosDeEvento($this);
+        if ($this->eventos->removeElement($evento)) {
+            $evento->removeJuegosDeEvento($this);
         }
 
         return $this;

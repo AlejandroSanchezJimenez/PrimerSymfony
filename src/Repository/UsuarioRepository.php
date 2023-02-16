@@ -59,17 +59,18 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
 //    /**
 //     * @return Usuario[] Returns an array of Usuario objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function updateTG ($tg,$userid)
+   {
+       return $this->createQueryBuilder('u')
+           ->update()
+           ->set('u.Num_telegram',':val')
+           ->andWhere('u.Email = :val2')
+           ->setParameter('val', $tg)
+           ->setParameter('val2', $userid)
+           ->getQuery()
+           ->getSingleScalarResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?Usuario
 //    {

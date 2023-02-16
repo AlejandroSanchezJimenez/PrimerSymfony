@@ -43,6 +43,7 @@ class RegistrationFormType extends AbstractType
             ->add('num_telegram', TextType::class, [
                 'label' => 'Telegram: ',
                 'trim' => 'true',
+                'required' => false,
                 'constraints' => [
                     new Length([
                         'min' => 9,

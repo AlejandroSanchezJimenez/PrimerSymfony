@@ -95,34 +95,14 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $Nickname = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank]
-    #[Assert\Length(
-        min: 9,
-        max: 9,
-        minMessage: 'Tu número de telegram debe ser de {{ limit }} dígitos',
-        maxMessage: 'Tu número de telegram debe ser de {{ limit }} dígitos',
-    )]
     private ?int $Num_telegram = null;
 
-    #[ORM\OneToMany(mappedBy: 'Invitados', targetEntity: Evento::class, orphanRemoval: true)]
-    private Collection $Eventos;
-
-    #[ORM\ManyToMany(targetEntity: Participacion::class, mappedBy: 'idUsuario')]
-    private Collection $Participaciones;
-
-    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'ParticipanEvento')]
+    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'Invitacion')]
     private Collection $eventos;
-
-    #[ORM\OneToMany(mappedBy: 'Usuario', targetEntity: Participacion::class, orphanRemoval: true)]
-    private Collection $participacions;
 
     public function __construct()
     {
-        $this->Reservas = new ArrayCollection();
-        $this->Eventos = new ArrayCollection();
-        $this->Participaciones = new ArrayCollection();
         $this->eventos = new ArrayCollection();
-        $this->participacions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -290,41 +270,14 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getEventos(): Collection
     {
-        return $this->Eventos;
-    }
-
-    /**
-     * @return Collection<int, Participacion>
-     */
-    public function getParticipaciones(): Collection
-    {
-        return $this->Participaciones;
-    }
-
-    public function addParticipacione(Participacion $participacione): self
-    {
-        if (!$this->Participaciones->contains($participacione)) {
-            $this->Participaciones->add($participacione);
-            $participacione->addIdUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipacione(Participacion $participacione): self
-    {
-        if ($this->Participaciones->removeElement($participacione)) {
-            $participacione->removeIdUsuario($this);
-        }
-
-        return $this;
+        return $this->eventos;
     }
 
     public function addEvento(Evento $evento): self
     {
         if (!$this->eventos->contains($evento)) {
             $this->eventos->add($evento);
-            $evento->addParticipanEvento($this);
+            $evento->addInvitacion($this);
         }
 
         return $this;
@@ -333,37 +286,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeEvento(Evento $evento): self
     {
         if ($this->eventos->removeElement($evento)) {
-            $evento->removeParticipanEvento($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Participacion>
-     */
-    public function getParticipacions(): Collection
-    {
-        return $this->participacions;
-    }
-
-    public function addParticipacion(Participacion $participacion): self
-    {
-        if (!$this->participacions->contains($participacion)) {
-            $this->participacions->add($participacion);
-            $participacion->setUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipacion(Participacion $participacion): self
-    {
-        if ($this->participacions->removeElement($participacion)) {
-            // set the owning side to null (unless already changed)
-            if ($participacion->getUsuario() === $this) {
-                $participacion->setUsuario(null);
-            }
+            $evento->removeInvitacion($this);
         }
 
         return $this;

@@ -1782,5 +1782,9 @@ label {
   pointer-events: none;
 }
 
+.CUSTOM_LABEL_CLASS {
+  color: white;
+}
+
 
 

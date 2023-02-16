@@ -37,15 +37,17 @@ class EventosType extends AbstractType
                 'class' => JuegoDeMesa::class,
                 'choices' => $this->juego->findAll(),
                 'choice_label' => 'Nombre',
-                'label' => 'Juego del evento',
-                'multiple' => true
+                'label' => 'Juegos del evento',
+                'multiple' => true,
+                'mapped' => false
             ])
             ->add('Participacion', EntityType::class, [
                 'class' => Usuario::class,
                 'choices' => $this->usuario->findAll(),
                 'choice_label' => 'Nickname',
                 'label' => 'Usuarios invitados',
-                'multiple' => true
+                'multiple' => true,
+                'mapped' => false
             ])
         ;
     }

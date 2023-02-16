@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Usuario;
 use App\Form\RegistrationFormType;
+use App\Form\TGType;
+use App\Repository\UsuarioRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,9 +13,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Mailer;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class RegistrationController extends AbstractController
 {
+    private $security;
+    private $userrep;
+
+    public function __construct(Security $security, UsuarioRepository $userrep)
+    {
+       $this->security = $security;
+       $this->userrep = $userrep;
+    }
+
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, Mailer $mailer): Response
     {
@@ -45,11 +57,29 @@ class RegistrationController extends AbstractController
 
             
 
-            return $this->redirectToRoute('landing');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/updateTG', name: 'app_updateTG')]
+    public function updateTG(Request $request): Response
+    {
+        $form = $this->createForm(TGType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $this->userrep->updateTG($form->get('num_telegram')->getData(),$this->security->getUser()->getUserIdentifier());
+
+            return $this->redirectToRoute('landing');
+        }
+
+        return $this->render('usuario/updateTG.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

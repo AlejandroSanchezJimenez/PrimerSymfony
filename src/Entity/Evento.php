@@ -35,19 +35,16 @@ class Evento
     #[Assert\NotBlank]
     private ?\DateTimeInterface $Fecha_evento = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $Asiste = null;
+    #[ORM\ManyToMany(targetEntity: JuegoDeMesa::class, inversedBy: 'eventos')]
+    private Collection $Juegos_de_evento;
 
-    #[ORM\OneToMany(mappedBy: 'evento', targetEntity: JuegosDeEvento::class, orphanRemoval: true)]
-    private Collection $JuegosDeEvento;
-
-    #[ORM\OneToMany(mappedBy: 'evento', targetEntity: Participacion::class, orphanRemoval: true)]
-    private Collection $Participacion;
+    #[ORM\ManyToMany(targetEntity: Usuario::class, inversedBy: 'eventos')]
+    private Collection $Invitacion;
 
     public function __construct()
     {
-        $this->JuegosDeEvento = new ArrayCollection();
-        $this->Participacion = new ArrayCollection();
+        $this->Juegos_de_evento = new ArrayCollection();
+        $this->Invitacion = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -91,66 +88,50 @@ class Evento
         return $this;
     }
 
-    public function isAsiste(): ?bool
+    /**
+     * @return Collection<int, JuegoDeMesa>
+     */
+    public function getJuegosDeEvento(): Collection
     {
-        return $this->Asiste;
+        return $this->Juegos_de_evento;
     }
 
-    public function setAsiste(?bool $Asiste): self
+    public function addJuegosDeEvento(JuegoDeMesa $juegosDeEvento): self
     {
-        $this->Asiste = $Asiste;
-
-        return $this;
-    }
-
-    public function addJuegosDeEvento(JuegosDeEvento $juegosDeEvento): self
-    {
-        if (!$this->JuegosDeEvento->contains($juegosDeEvento)) {
-            $this->JuegosDeEvento->add($juegosDeEvento);
-            $juegosDeEvento->setEvento($this);
+        if (!$this->Juegos_de_evento->contains($juegosDeEvento)) {
+            $this->Juegos_de_evento->add($juegosDeEvento);
         }
 
         return $this;
     }
 
-    public function removeJuegosDeEvento(JuegosDeEvento $juegosDeEvento): self
+    public function removeJuegosDeEvento(JuegoDeMesa $juegosDeEvento): self
     {
-        if ($this->JuegosDeEvento->removeElement($juegosDeEvento)) {
-            // set the owning side to null (unless already changed)
-            if ($juegosDeEvento->getEvento() === $this) {
-                $juegosDeEvento->setEvento(null);
-            }
-        }
+        $this->Juegos_de_evento->removeElement($juegosDeEvento);
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Participacion>
+     * @return Collection<int, Usuario>
      */
-    public function getParticipacion(): Collection
+    public function getInvitacion(): Collection
     {
-        return $this->Participacion;
+        return $this->Invitacion;
     }
 
-    public function addParticipacion(Participacion $participacion): self
+    public function addInvitacion(Usuario $invitacion): self
     {
-        if (!$this->Participacion->contains($participacion)) {
-            $this->Participacion->add($participacion);
-            $participacion->setEvento($this);
+        if (!$this->Invitacion->contains($invitacion)) {
+            $this->Invitacion->add($invitacion);
         }
 
         return $this;
     }
 
-    public function removeParticipacion(Participacion $participacion): self
+    public function removeInvitacion(Usuario $invitacion): self
     {
-        if ($this->Participacion->removeElement($participacion)) {
-            // set the owning side to null (unless already changed)
-            if ($participacion->getEvento() === $this) {
-                $participacion->setEvento(null);
-            }
-        }
+        $this->Invitacion->removeElement($invitacion);
 
         return $this;
     }

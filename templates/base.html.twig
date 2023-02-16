@@ -48,15 +48,15 @@
 									<li>
 										<a href="/juegos">Juegos de mesa</a>
 									</li>
-									<li>
-										<a href="/eventos">Eventos</a>
-									</li>
 									{% if app.user!=null %}
 										{% if "ROLE_ADMIN" in app.user.roles %}
 											<li>
 												<a href="/admin">Mantenimiento</a>
 											</li>
 										{% endif %}
+										<li>
+											<a href="/eventos">Eventos</a>
+										</li>
 										<li>
 											<a href="/logout">Logout</a>
 										</li>

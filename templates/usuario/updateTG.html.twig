@@ -29,28 +29,16 @@
 										</div>
 									{% endfor %}
 									<h3>
-										<em>¡Crea un evento!</em>
+										<em>¡Telegram, allá voy!</em>
 									</h3>
 									<br><br>
 									{{ form_start(form) }}
-									{{ form_label(form.Nombre)}}
-									{{ form_widget(form.Nombre)}}
-									{{ form_errors(form.Nombre)}}
+									{{ form_label(form.num_telegram)}}
+									{{ form_widget(form.num_telegram)}}
+									{{ form_errors(form.num_telegram)}}
 									<br><br>
-									{{ form_label(form.Descripcion)}}
-									{{ form_widget(form.Descripcion)}}
-									{{ form_errors(form.Descripcion)}}<br><br>
-									{{ form_label(form.Fecha_Evento)}}
-									{{ form_widget(form.Fecha_Evento)}}
-									{{ form_errors(form.Fecha_Evento)}}<br><br>
-									{{ form_label(form.JuegosDeEvento)}}
-									{{ form_widget(form.JuegosDeEvento)}}
-									{{ form_errors(form.JuegosDeEvento)}}<br><br>
-									{{ form_label(form.Participacion)}}
-									{{ form_widget(form.Participacion)}}
-									{{ form_errors(form.Participacion)}}<br><br>
 									<center>
-										<button type="submit" class="main-button-new">Crear evento</button>
+										<button type="submit" class="main-button-new">Suscribirme</button>
 									</center>
 									{{ form_end(form) }}
 								</div>
@@ -64,4 +52,3 @@
 				</div>
 			</div>
 		{% endblock %}
-
