@@ -12,11 +12,6 @@ class MessageGenerator
     {
         $this->logger = $logger;
     }
-
-    // public function getHappyMessage(): string
-    // {
-    //     $this->logger->info('About to find a happy message!');
-    // }
 }
 
 ?>

@@ -7,7 +7,6 @@ use App\Entity\Usuario;
 use App\Entity\JuegoDeMesa;
 use App\Repository\JuegoDeMesaRepository;
 use App\Repository\UsuarioRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

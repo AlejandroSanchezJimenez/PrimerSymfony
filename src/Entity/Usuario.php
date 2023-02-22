@@ -291,4 +291,18 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function admin() {
+        if (in_array('ROLE_ADMIN',$this->getRoles())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public function getFullName()
+    {
+        return $this->getNombre().' '.$this->getApe1().' '.$this->getApe2();
+    }
 }

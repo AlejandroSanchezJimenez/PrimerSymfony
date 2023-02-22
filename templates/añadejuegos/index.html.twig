@@ -23,6 +23,30 @@
 						<center>
 							<div class="col-lg-3 col-sm-6">
 								<div class="item">
+									{% if juegoedit is not null %}
+										<h3>
+											<em>Este juego necesita unos retoques</em>
+										</h3>
+										<br><br>
+										{{ form_start(form) }}
+										{{ form_row(form.Nombre, {'value' : juegoedit.nombre, disabled :"disabled"}) }}<br>
+										{{ form_row(form.Editorial, {'value' : juegoedit.Editorial}) }}<br>
+										{{ form_row(form.Anchura, {'value' : juegoedit.Anchura}) }}<br>
+										{{ form_row(form.Longitud, {'value' : juegoedit.Longitud}) }}<br>
+										<img src="{{ asset('Juego_de_mesa_fotos/' ~ juegoedit.Nombre ~ 'caratula.png') }}" alt="" class="templatemo-item">
+										{{ form_row(form.Caratula) }}<br>
+										<img src="{{ asset('Juego_de_mesa_fotos/' ~ juegoedit.Nombre ~ 'tablero.png') }}" alt="" class="templatemo-item">
+										{{ form_row(form.Tablero) }}<br>
+										{{ form_row(form.Min_jug, {'value' : juegoedit.Minjug}) }}<br>
+										{{ form_row(form.Max_jug, {'value' : juegoedit.Maxjug}) }}<br><br>
+
+										<center>
+											<button onclick={{
+                                             app.session.remove('juego') 
+                                             }} type="submit" class="main-button-new">Editar</button>
+										</center>
+										{{ form_end(form) }}
+									{% else %}
 									<h3>
 										<em>Más juegos, más diversión</em>
 									</h3>
@@ -41,11 +65,10 @@
 										<button type="submit" class="main-button-new">Añadir</button>
 									</center>
 									{{ form_end(form) }}
+									{% endif %}
 								</div>
 							</div>
-							<center>
-
-							</div>
+							<center></div>
 							<!-- ***** Most Popular End ***** -->
 
 
@@ -54,4 +77,3 @@
 				</div>
 			</div>
 		{% endblock %}
-

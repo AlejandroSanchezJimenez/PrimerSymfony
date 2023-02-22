@@ -40,19 +40,6 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Nickname: ',
                 'trim' => 'true'
             ])
-            ->add('num_telegram', TextType::class, [
-                'label' => 'Telegram: ',
-                'trim' => 'true',
-                'required' => false,
-                'constraints' => [
-                    new Length([
-                        'min' => 9,
-                        'minMessage' => 'El número de telegram debe ser de 9 dígitos',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 9,
-                    ]),
-                ],
-            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'label' => 'He leído y acepto las condiciones del servicio y la política de privacidad',

@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Evento;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class EventoCrudController extends AbstractCrudController
@@ -12,14 +13,27 @@ class EventoCrudController extends AbstractCrudController
         return Evento::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            'Fecha_evento',
+            'nombre',
+            'descripcion'
         ];
     }
-    */
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInPlural('Eventos')
+            ->setEntityLabelInSingular('...')
+            ->setDateFormat('dd/MM/yyyy')
+            ->setSearchFields(['Fecha_evento', 'nombre'])
+            ->setDefaultSort(['Fecha_evento' => 'DESC'])
+            ->setPaginatorPageSize(10)
+            ->setPaginatorRangeSize(2)
+            ->setPaginatorFetchJoinCollection(true)
+            // ...
+        ;
+    }
 }

@@ -43,9 +43,6 @@
 											<li>Email
 												<span>{{app.user.Email}}</span>
 											</li>
-											<li>Número de telegram
-												<span>{{app.user.numtelegram}}</span>
-											</li>
 										</ul>
 									</div>
 								</div>
@@ -95,37 +92,49 @@
 						<div class="col-lg-12">
 							<div class="heading-section">
 								<h4>
-									<em>Eventos </em>
+									<em>Eventos</em>
 									en los que he participado</h4>
 							</div>
-							{% if eventos!=null %}
-								{% for evento in eventos %}
-									<div class="item">
-									<center>
-										<ul>
-											<li>
-												<h4>Nombre</h4>
-												<span>{{evento.nombre}}</span>
-											</li>
-											<li>
-												<h4>Descripción</h4>
-												<span>{{evento.Descripcion}}</span>
-											</li>
-											<li>
-												<h4>Fecha de inicio</h4>
-												<span>{{evento.fechaevento|date('d-m-y')}}</span>
-											</li>
-										</ul>
-									</center>
-									</div>
-								{% endfor %}
+							{% if eventos is empty %}
+							<center>
+									<ul>
+										<li><h4>Aún no has participado en ningún evento, pero no te desanimes, ¡pronto asistirás a alguno!<h4></li>
+									</ul>
+							</center>
 							{% else %}
-								<h4>
-									<center>Sin eventos de momento. ¡Anímate!
+								{% for evento in eventos %}
+								{% set juegos= eventorep.findJuegosDeEventoByID(eventonew,evento.id) %}
+								<div class="item">
+									<center>
+									<ul>
+										<li><h4>Nombre</li>
+										<li><h4>Descripción</li>
+										<li><h4>Fecha del evento</li>
+										<li><h4>Juegos</li>
+									<ul>
+									<ul>
+										<li>
+											<span vertical-align='center'>{{evento.nombre}}</span>
+										</li>
+										<li>
+											<span vertical-align='center'>{{evento.descripcion}}</span>
+										</li>
+										<li>
+											<span vertical-align='center'>{{evento.fecha_evento|date('d-m-y')}}</span>
+										</li>
+										<li>
+											<span vertical-align='center'>
+											{% for juego in juegos %}
+												{{juego.nombre}}<br>
+											{% endfor %}
+											</span>
+										</li>
+									</ul>
 									</center>
-								</h4>
+								</div>
+								{% endfor %}
 							{% endif %}
-
+							
 						</div>
 					</div>
 

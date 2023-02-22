@@ -39,54 +39,92 @@ class EventoRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Evento[] Returns an array of Evento objects
-//     */
-   public function findByExampleField($value): array
-   {
-       return $this->createQueryBuilder('e')
-           ->andWhere('e.Fecha_evento >= :val')
-           ->setParameter('val', $value)
-           ->orderBy('e.id', 'ASC')
-        //    ->setMaxResults(10)
-           ->getQuery()
-           ->getResult()
-       ;
-   }
+    //    /**
+    //     * @return Evento[] Returns an array of Evento objects
+    //     */
+    public function findByExampleField($sysdate): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.Fecha_evento >= :val')
+            ->setParameter('sysdate', $sysdate)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-   public function findByNombre($value): Evento
-   {
-       return $this->createQueryBuilder('e')
-           ->andWhere('e.Nombre = :val')
-           ->setParameter('val', $value)
-        //    ->orderBy('e.id', 'ASC')
-        //    ->setMaxResults(10)
-           ->getQuery()
-           ->getOneOrNullResult()
-       ;
-   }
+    public function findByNombre($nombre): Evento
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.Nombre = :nombre')
+            ->setParameter('nombre', $nombre)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
-   public function findIfAsiste($id,$date): array
-   {
-       return $this->createQueryBuilder('e')
-           ->andWhere('e.ParticipanEvento = :val')
-           ->andWhere('e.Fecha_evento >= :val')
-           ->setParameter('val', $id)
-           ->setParameter('val2', $date)
-           ->orderBy('e.id', 'ASC')
-        //    ->setMaxResults(10)
-           ->getQuery()
-           ->getResult()
-       ;
-   }
+    public function findEventosByID(Evento $evento, $id)
+    {
+        $conn = $this->getEntityManager()
+            ->getConnection();
+        $sql = 'select * from evento e join evento_usuario u on e.id=u.evento_id  where usuario_id=' . $id . ' and fecha_evento>=curdate() group by id';
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+        return $result->fetchAllAssociative();
+    }
 
-//    public function findOneBySomeField($value): ?Evento
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findEventoByNombre($nombre) : Evento
+    {
+        return $this->createQueryBuilder('e')
+        ->andWhere('e.Nombre = :val')
+        ->setParameter('val', $nombre)
+        ->getQuery()
+        ->getOneOrNullResult();
+    }
+
+    public function findEventosByIDallDates(Evento $evento, $id)
+    {
+        $conn = $this->getEntityManager()
+            ->getConnection();
+        $sql = 'select * from evento e join evento_usuario u on e.id=u.evento_id  where usuario_id=' . $id . ' and fecha_evento<=curdate() group by id';
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+        return $result->fetchAllAssociative();
+    }
+
+    public function findJuegosDeEventoByID(Evento $evento, $id)
+    {
+        $conn = $this->getEntityManager()
+            ->getConnection();
+        $sql = 'select m.nombre from evento e join evento_juego_de_mesa j on e.id=j.evento_id join juego_de_mesa m on j.juego_de_mesa_id=m.id where evento_id='.$id;
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+        return $result->fetchAllAssociative();
+    }
+
+    
+    public function insertInUsuariosEvento(Evento $evento, $id,$idevento)
+    {
+        $conn = $this->getEntityManager()
+            ->getConnection();
+        $sql = 'insert into evento_usuario(evento_id,usuario_id) values (' .$idevento. ',' .$id. ')';
+        $stmt = $conn->prepare($sql);
+        $stmt->executeQuery();
+    }
+
+    public function updateAsistencia(Evento $evento, $asiste, $juegoid,$eventoid)
+    {
+        if ($asiste) {
+            $conn = $this->getEntityManager()
+                ->getConnection();
+            $sql = 'update evento_usuario set asiste=true where usuario_id=' . $juegoid . ' and evento_id=' .$eventoid;
+            $stmt = $conn->prepare($sql);
+            $stmt->executeQuery();
+        }
+        else {
+            $conn = $this->getEntityManager()
+                ->getConnection();
+            $sql = 'update evento_usuario set asiste=false where usuario_id=' . $juegoid . ' and evento_id=' .$eventoid;
+            $stmt = $conn->prepare($sql);
+            $stmt->executeQuery();
+        }
+    }
 }

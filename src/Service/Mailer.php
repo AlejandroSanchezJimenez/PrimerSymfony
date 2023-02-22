@@ -23,8 +23,6 @@ class Mailer
             ->subject('¡Bienvenido a la familia de los juegos hermanos!')
             ->htmlTemplate('emailTemplates/welcome.html.twig')
             ->context([
-                // You can pass whatever data you want
-                //'user' => $user,
             ]);
         $this->mailer->send($email);
     }
@@ -37,12 +35,21 @@ class Mailer
             ->subject('¿Un evento? ¡Los juegos te llaman!')
             ->htmlTemplate('emailTemplates/invitacion.html.twig')
             ->context([
-                // You can pass whatever data you want
-                //'user' => $user,
             ]);
         $this->mailer->send($email);
     }
 
+    public function changeReserva(Usuario $user)
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address('asajiradio@gmail.com', 'Los juegos hermanos'))
+            ->to(new Address($user->getEmail(), $user->getNombre()))
+            ->subject('Ha habido cambios en tu reserva')
+            ->htmlTemplate('emailTemplates/changereserva.html.twig')
+            ->context([
+            ]);
+        $this->mailer->send($email);
+    }
 }
 
 

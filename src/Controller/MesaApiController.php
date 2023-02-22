@@ -7,7 +7,6 @@ use App\Repository\MesaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MesaApiController extends AbstractController
@@ -34,7 +33,7 @@ class MesaApiController extends AbstractController
     }
 
     #[Route('/mesa/api/{id}', name: 'app_mesa_api_delete', methods:['DELETE'])]
-    public function removeMesa(Request $request, MesaRepository $mesarep, int $id): JsonResponse
+    public function removeMesa(MesaRepository $mesarep, int $id): JsonResponse
     {
 
         $mesa=$mesarep->findByField($id);
@@ -50,7 +49,7 @@ class MesaApiController extends AbstractController
     }
 
     #[Route('/mesa/api/', name: 'app_mesa_api_getAll', methods:['GET','HEAD'])]
-    public function getMesa(Request $request, MesaRepository $mesarep): JsonResponse
+    public function getMesa(MesaRepository $mesarep): JsonResponse
     {
             $mesas=$mesarep->findAll();
 
@@ -66,7 +65,7 @@ class MesaApiController extends AbstractController
     }
 
     #[Route('/mesa/api/{id}', name: 'app_mesa_api_getOne', methods:['GET','HEAD'])]
-    public function getMesaByID(Request $request, MesaRepository $mesarep, int $id): JsonResponse
+    public function getMesaByID(MesaRepository $mesarep, int $id): JsonResponse
     {
         $mesa=$mesarep->findByField($id);
         

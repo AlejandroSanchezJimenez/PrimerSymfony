@@ -7,14 +7,10 @@ use App\Entity\Mesa;
 use App\Entity\Reserva;
 use App\Repository\JuegoDeMesaRepository;
 use App\Repository\MesaRepository;
-use Doctrine\ORM\EntityRepository;
-use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
@@ -44,9 +40,6 @@ class ReservaType extends AbstractType
             ])
             ->add('dia_reserva', DateType::class, [
                 'widget' => 'single_text',
-                // 'years' => range(date('Y'), date('Y') + 100),
-                // 'months' => range(date('m'), date('m') + 12),
-                // 'days' => range(date('d'), date('d') + 31),
             ])
             ->add('Hora_entrada', TimeType::class, [
                 'label' => 'Hora de entrada',

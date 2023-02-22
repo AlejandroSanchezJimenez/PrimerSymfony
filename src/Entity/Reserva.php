@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ReservaRepository;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -141,5 +140,25 @@ class Reserva
         $this->Dia_reserva = $Dia_reserva;
 
         return $this;
+    }
+
+    public function horas() {
+        return 'De '.$this->Hora_entrada->format('H:i').' a '.$this->getHoraSalida()->format('H:i');
+    }
+
+    public function nombreJuego() {
+        return $this->getJuego()->getNombre();
+    }
+
+    public function nombreUser() {
+        return $this->getIdUsuario()->getNickname();
+    }
+
+    public function cancelacion() {
+        if ($this->getFechaCancelacion() === null) {
+            return 'No ha cancelado';
+        } else {
+            return $this->Fecha_cancelacion->format('d-m-Y');
+        }
     }
 }

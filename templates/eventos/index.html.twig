@@ -31,36 +31,69 @@
 									<em>Eventos</em>
 									a los que me han invitado</h4>
 							</div>
-							{% for evento in eventos %}
-							<div class="item">
-								<center>
-								<ul>
-									<li>
-										<h4>Nombre</h4>
-										<span>{{evento.nombre}}</span>
-									</li>
-									<li>
-										<h4>Descripción</h4>
-										<span>{{evento.Descripcion}}</span>
-									</li>
-									<li>
-										<h4>Fecha de inicio</h4>
-										<span>{{evento.fechaevento|date('d-m-y')}}</span>
-									</li>
-									<li>
-										<div class="main-button">
-											<a href="#">Asistiré</a>
-										</div>
-									</li>
-									<li>
-										<div class="main-button">
-											<a href="#">No asistiré</a>
-										</div>
-									</li>
-								</ul>
-								</center>
-							</div>
-							{% endfor %}
+							{% if eventos is empty %}
+							<center>
+									<ul>
+										<li><h4>Aún no has recibido ninguna invitación, pero no te desanimes, ¡haz reservas y disfruta de otros juegos mientras tanto!<h4></li>
+									</ul>
+							</center>
+							{% else %}
+								{% for evento in eventos %}
+								{% set juegos= eventorep.findJuegosDeEventoByID(eventonew,evento.id) %}
+								<div class="item">
+									<center>
+									<ul>
+										<li><h4>Nombre</li>
+										<li><h4>Descripción</li>
+										<li><h4>Fecha del evento</li>
+										<li><h4>Juegos</li>
+										<li><h4>Asistencia</h4></li>
+									<ul>
+									<ul>
+										<li>
+											<span vertical-align='center'>{{evento.nombre}}</span>
+										</li>
+										<li>
+											<span vertical-align='center'>{{evento.descripcion}}</span>
+										</li>
+										<li>
+											<span vertical-align='center'>{{evento.fecha_evento|date('d-m-y')}}</span>
+										</li>
+										<li>
+											<span vertical-align='center'>
+											{% for juego in juegos %}
+												{{juego.nombre}}<br>
+											{% endfor %}
+											</span>
+										</li>
+										
+										{% if (evento.asiste is null) %}
+										<li>
+											<div class="main-button">
+												<a href={{'/eventos/asiste/' ~ evento.id}}>Asistiré</a>
+											</div><br><br><br>
+											{# <div class="main-button">
+												<a href={{'/eventos/noasiste/' ~ evento.id}}>No asistiré</a>
+											</div> #}
+										</li>
+										{% elseif (evento.asiste==1) %}
+										<li>
+											<div class="main-button">
+												<a href={{'/eventos/noasiste/' ~ evento.id}}>Cancelar asistencia</a>
+											</div>
+										</li>
+										{% else %}
+										<li>
+											<div class="main-button">
+												<a href={{'/eventos/asiste/' ~ evento.id}}>Cancelar no asistencia</a>
+											</div>
+										</li>
+										{% endif %}
+									</ul>
+									</center>
+								</div>
+								{% endfor %}
+							{% endif %}
 							
 						</div>
 					</div>

@@ -118,12 +118,18 @@ class Mesa
     public function removeMesasReservada(Reserva $mesasReservada): self
     {
         if ($this->Mesas_reservadas->removeElement($mesasReservada)) {
-            // set the owning side to null (unless already changed)
             if ($mesasReservada->getMesa() === $this) {
                 $mesasReservada->setMesa(null);
             }
         }
 
         return $this;
+    }
+
+    public function Posicion() {
+        return '('.$this->getX().','.$this->getY().')';
+    }
+    public function Tamaño() {
+        return $this->getLongitud().'x'.$this->getAnchura();
     }
 }

@@ -34,7 +34,6 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -45,8 +44,6 @@ class RegistrationController extends AbstractController
             $user->setApe1($form->get('Ape1')->getData());
             $user->setApe2($form->get('Ape2')->getData());
             $user->setNickname($form->get('Nickname')->getData());
-            $user->setEmail($form->get('Email')->getData());
-            $user->setNumTelegram($form->get('num_telegram')->getData());
             $user->setEmail($form->get('Email')->getData());
             $user->setRoles(array("ROLE_USER"));
             

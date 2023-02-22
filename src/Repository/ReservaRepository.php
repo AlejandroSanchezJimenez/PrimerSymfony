@@ -45,10 +45,7 @@ class ReservaRepository extends ServiceEntityRepository
    public function findAll(): array
    {
        return $this->createQueryBuilder('r')
-        //    ->andWhere('r.exampleField = :val')
-        //    ->setParameter('val', $value)
            ->orderBy('r.id', 'ASC')
-        //    ->setMaxResults(10)
            ->getQuery()
            ->getResult()
        ;
@@ -63,7 +60,6 @@ class ReservaRepository extends ServiceEntityRepository
            ->setParameter('val', $value)
            ->setParameter('val2', $value2)
            ->orderBy('r.id', 'ASC')
-        //    ->setMaxResults(10)
            ->getQuery()
            ->getResult()
        ;
@@ -86,12 +82,20 @@ class ReservaRepository extends ServiceEntityRepository
        ;
    }
 
+   public function findIfReservaExistDay($value): array
+   {
+       return $this->createQueryBuilder('r')
+           ->andWhere('r.Dia_reserva = :val')
+           ->setParameter('val', $value)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
    public function findJuegosPopulares(): array
     {
         return $this->createQueryBuilder('r')
             ->leftjoin('r.Juego','j')
-            //    ->andWhere('j.exampleField = :val')
-            //    ->setParameter('val', $value)
             ->groupBy('r.Juego')
             ->orderBy('count(r.Juego)', 'DESC')
             ->setMaxResults(4)

@@ -42,10 +42,7 @@ class JuegoDeMesaRepository extends ServiceEntityRepository
     public function findAllJuegos(): JuegoDeMesa
     {
         return $this->createQueryBuilder('j')
-            //    ->andWhere('j.exampleField = :val')
-            //    ->setParameter('val', $value)
             ->orderBy('j.id', 'ASC')
-            //    ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
@@ -58,5 +55,12 @@ class JuegoDeMesaRepository extends ServiceEntityRepository
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function insertJuegoInSession(JuegoDeMesa $juego)
+    {
+        $session  = $this->get("session");
+        serialize($juego);
+        $session->set('juego',$juego);
     }
 }

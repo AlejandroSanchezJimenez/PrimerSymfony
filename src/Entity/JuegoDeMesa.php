@@ -46,12 +46,6 @@ class JuegoDeMesa
     private ?float $Longitud = null;
 
     #[ORM\Column(type: Types::BLOB)]
-    // #[Assert\Image(
-    //     minWidth: 100,
-    //     maxWidth: 200,
-    //     minHeight: 100,
-    //     maxHeight: 200,
-    // )]
     private $Caratula = null;
 
     #[ORM\Column]
@@ -69,12 +63,6 @@ class JuegoDeMesa
     private ?int $Max_jug = null;
 
     #[ORM\Column(type: Types::BLOB)]
-    // #[Assert\Image(
-    //     minWidth: 100,
-    //     maxWidth: 200,
-    //     minHeight: 100,
-    //     maxHeight: 200,
-    // )]
     private $Tablero = null;
 
     #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'Juegos_de_evento')]

@@ -36,7 +36,7 @@
 								class="main-nav">
 								<!-- ***** Logo Start ***** -->
 								<a href="/" class="logo">
-									<img src="assets/images/logo.png" alt="">
+									<img src="{{asset('assets/images/logo.png')}}" alt="">
 								</a>
 								<!-- ***** Logo End ***** -->
 
@@ -49,25 +49,25 @@
 										<a href="/juegos">Juegos de mesa</a>
 									</li>
 									{% if app.user!=null %}
+										<li>
+											<a href="/eventos">Eventos</a>
+										</li>
 										{% if "ROLE_ADMIN" in app.user.roles %}
 											<li>
 												<a href="/admin">Mantenimiento</a>
 											</li>
 										{% endif %}
 										<li>
-											<a href="/eventos">Eventos</a>
-										</li>
-										<li>
 											<a href="/logout">Logout</a>
 										</li>
 										<li>
 											<a href="/perfil">Perfil
-												<img src="assets/images/logo.png" alt=""></a>
+												<img src="{{asset('assets/images/logo.png')}}" alt=""></a>
 										</li>
 									{% else %}
 										<li>
 											<a href="/login">Login
-												<img src="assets/images/logo.png" alt=""></a>
+												<img src="{{asset('assets/images/logo.png')}}" alt=""></a>
 										</li>
 									{% endif %}
 								</ul>

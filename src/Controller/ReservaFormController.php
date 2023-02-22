@@ -8,9 +8,6 @@ use App\Form\ReservaType;
 use App\Repository\JuegoDeMesaRepository;
 use App\Repository\ReservaRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Id;
-use Exception;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +30,6 @@ class ReservaFormController extends AbstractController
     #[Route('/reserva', name: 'crea_reservas')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
-        // creates a task object and initializes some data for this example
         $reserva = new Reserva;
         $juego = new JuegoDeMesa;
         $juego = $this-> juego ->findOneBySomeField($_GET['idjuego']);
@@ -42,9 +38,6 @@ class ReservaFormController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
-            // $reserva = $form->getData();
             $date = date('y-m-d');
             $date_convert = date_format($form->get('dia_reserva')->getData(), 'y-m-d');
             
