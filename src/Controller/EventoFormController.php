@@ -44,12 +44,18 @@ class EventoFormController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $timestamp = strtotime(date_format($form->get('Fecha_Evento')->getData(),'y-m-d'));
+            $day = date('w', $timestamp);
             $date = date('y-m-d');
             $date_convert = date_format($form->get('Fecha_Evento')->getData(), 'y-m-d');
 
             if ($date_convert <= $date) {
                 $this->addFlash('Errordate', 'Debe elegir una fecha posterior a la de hoy');
-            } else {
+            } 
+            else if ($day==0) {
+                $this->addFlash('Errordate', 'Los domingos deben ser respetados para descanso del personal');
+            }
+            else {
                 $evento = $form->getData();
 
                 $arrayJuegos = $form->get('JuegosDeEvento')->getData();
@@ -65,12 +71,23 @@ class EventoFormController extends AbstractController
 
                     if ($user->getNumTelegram()) {
                         $chatid = $user->getNumTelegram();
-                        $mensaje = 'Has recibido una invitación para acudir al evento ' . $form->get('Nombre')->getData() . ' realizado el ' . $form->get('Fecha_Evento')->getData()->format('d-m-Y') . '. Por favor confirma tu asistencia accediendo a la pestaña de eventos de la página de Los Juegos Hermanos';
+                        $mensaje = 'Has recibido una invitación para acudir al evento <b>' . $form->get('Nombre')->getData() . '</b> realizado el <b>' . $form->get('Fecha_Evento')->getData()->format('d-m-Y') . '</b>. Por favor confirma tu asistencia accediendo a la pestaña de eventos de la página de <a href="https://www.revista-airelibre.com/2020/09/16/mi-perra-mi-gran-companera-de-caza/">Los juegos hermanos</a>';
                         $url = "https://api.telegram.org/bot6267084166:AAFQb1ByP74ebPIM8coZo6xzwvY0Q9Hnx8o/sendMessage?chat_id=" . $chatid;
-                        $url = $url . "&text=" . urlencode($mensaje);
+                        $url = $url . "&parse_mode=html&text=" . urlencode($mensaje);
                         $ch = curl_init();
                         $optArray = array(
                             CURLOPT_URL => $url,
+                            CURLOPT_RETURNTRANSFER => true
+                        );
+                        curl_setopt_array($ch, $optArray);
+                        curl_exec($ch);
+                        curl_close($ch);
+
+                        $url2 = "https://api.telegram.org/bot6267084166:AAFQb1ByP74ebPIM8coZo6xzwvY0Q9Hnx8o/sendPhoto?chat_id=" . $chatid;
+                        $url2 = $url2 . "&photo=https://i.ytimg.com/vi/tgRTunsDrC4/maxresdefault.jpg";
+                        $ch = curl_init();
+                        $optArray = array(
+                            CURLOPT_URL => $url2,
                             CURLOPT_RETURNTRANSFER => true
                         );
                         curl_setopt_array($ch, $optArray);

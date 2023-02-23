@@ -2,7 +2,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Los juegos hermanos
+	Añadir juegos
 {% endblock %}
 
 {% block body %}
@@ -14,10 +14,14 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
-				<div
-					class="page-content">
+				<div class="page-content">
 
 
+					{% for message in app.flashes('Exito') %}
+						<div class="alert alert-success">
+							{{ message }}
+						</div>
+					{% endfor %}
 					<!-- ***** Most Popular Start ***** -->
 					<div class="most-popular">
 						<center>
@@ -41,30 +45,28 @@
 										{{ form_row(form.Max_jug, {'value' : juegoedit.Maxjug}) }}<br><br>
 
 										<center>
-											<button onclick={{
-                                             app.session.remove('juego') 
-                                             }} type="submit" class="main-button-new">Editar</button>
+											<button onclick={{ app.session.remove('juego') }} type="submit" class="main-button-new">Editar</button>
 										</center>
 										{{ form_end(form) }}
 									{% else %}
-									<h3>
-										<em>Más juegos, más diversión</em>
-									</h3>
-									<br><br>
-									{{ form_start(form) }}
-									{{ form_row(form.Nombre) }}<br>
-									{{ form_row(form.Editorial) }}<br>
-									{{ form_row(form.Anchura) }}<br>
-									{{ form_row(form.Longitud) }}<br>
-									{{ form_row(form.Caratula) }}<br>
-									{{ form_row(form.Tablero) }}<br>
-									{{ form_row(form.Min_jug) }}<br>
-									{{ form_row(form.Max_jug) }}<br><br>
+										<h3>
+											<em>Más juegos, más diversión</em>
+										</h3>
+										<br><br>
+										{{ form_start(form) }}
+										{{ form_row(form.Nombre) }}<br>
+										{{ form_row(form.Editorial) }}<br>
+										{{ form_row(form.Anchura) }}<br>
+										{{ form_row(form.Longitud) }}<br>
+										{{ form_row(form.Caratula) }}<br>
+										{{ form_row(form.Tablero) }}<br>
+										{{ form_row(form.Min_jug) }}<br>
+										{{ form_row(form.Max_jug) }}<br><br>
 
-									<center>
-										<button type="submit" class="main-button-new">Añadir</button>
-									</center>
-									{{ form_end(form) }}
+										<center>
+											<button type="submit" class="main-button-new">Añadir</button>
+										</center>
+										{{ form_end(form) }}
 									{% endif %}
 								</div>
 							</div>

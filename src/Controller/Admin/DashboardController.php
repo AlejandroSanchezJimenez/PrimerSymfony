@@ -27,7 +27,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle("<center><img src='assets/images/logo.png')}}' height=150 width=150><br> Los juegos <span class='text-small'>Hermanos</span></center>")
+            ->setTitle("<center><img src='assets/images/logocustom.png')}}' height=150 width=150><br> Los juegos <span class='text-small'>Hermanos</span></center>")
 
             ->setFaviconPath('assets/images/logo.png')
 
@@ -39,11 +39,10 @@ class DashboardController extends AbstractDashboardController
         ;
     }
     
-
     public function configureMenuItems(): iterable
     {
         return [
-            MenuItem::linkToRoute('Home', 'fa fa-home', 'landing'),
+            MenuItem::linkToRoute('Home', 'fa fa-home', 'admin'),
             MenuItem::subMenu('Base de datos', 'fa-solid fa-database')->setSubItems([
                 MenuItem::linkToCrud('Juegos de mesa', 'fa fa-chess-board', JuegoDeMesa::class),
                 MenuItem::linkToCrud('Usuarios', 'fa fa-user', Usuario::class),
@@ -51,6 +50,7 @@ class DashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('Reservas', 'fa fa-book', Reserva::class),
                 MenuItem::linkToCrud('Eventos', 'fa fa-star', Evento::class),
             ]),
+            MenuItem::linkToRoute('Volver a la web', 'fa fa-arrow-left', 'landing'),
             MenuItem::linkToLogout('Logout', 'fa-solid fa-right-from-bracket'),
         ];
     }

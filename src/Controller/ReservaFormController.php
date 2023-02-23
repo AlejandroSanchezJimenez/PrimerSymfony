@@ -38,14 +38,26 @@ class ReservaFormController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $timestamp = strtotime(date_format($form->get('dia_reserva')->getData(),'y-m-d'));
+            $day = date('w', $timestamp);
             $date = date('y-m-d');
             $date_convert = date_format($form->get('dia_reserva')->getData(), 'y-m-d');
-            
+            $hora_entrada=date_format($form->get('Hora_entrada')->getData(),'H');
+            $hora_salida=date_format($form->get('Hora_salida')->getData(),'H');
+            $min_entrada=date_format($form->get('Hora_entrada')->getData(),'H');
+            $min_salida=date_format($form->get('Hora_salida')->getData(),'H');
+
             if ($this->reservarep->findIfReservaExist($form->get('dia_reserva')->getData(),$form->get('Hora_entrada')->getData(),$form->get('Hora_salida')->getData(),$form->get('Mesa')->getData(),$date)) {
                 $this->addFlash('Error', 'Ya existe una reserva en ese rango horario');
             }
             else if ($date_convert<=$date) {
                 $this->addFlash('Errordate', 'Debe elegir una fecha posterior a la de hoy');
+            }
+            else if ($day==0) {
+                $this->addFlash('Errordate', 'Los domingos deben ser respetados para descanso del personal');
+            }
+            else if ($form->get('Hora_entrada')->getData()>$form->get('Hora_salida')->getData()) {
+                $this->addFlash('Errordate', 'La hora de entrada debe ser anterior a la de salida');
             }
             else {
                 $reserva->setJuego($juego);
